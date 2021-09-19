@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer.dart';
@@ -8,6 +11,8 @@ class BaseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    developer.log('log me', name: context.toString());
     return Provider(
       create: (_) => PageManager(pageController),
       child: PageView(
@@ -17,7 +22,7 @@ class BaseScreen extends StatelessWidget {
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home'),
+              title: const Text('Home teste'),
             ),
           ),
           Scaffold(
