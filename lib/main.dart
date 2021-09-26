@@ -30,7 +30,6 @@ class MyApp extends StatelessWidget {
           appBarTheme: const AppBarTheme(elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: '/base',
         onGenerateRoute: (settings) {
           stderr.writeln('print me = settings');
           developer.log('log me', name: settings.name);
@@ -44,7 +43,7 @@ class MyApp extends StatelessWidget {
             case '/base':
               return MaterialPageRoute(builder: (_) => BaseScreen());
             default:
-            return MaterialPageRoute(builder: (_) => LoginScreen());
+              return MaterialPageRoute(builder: (_) => LoginScreen());
           }
         },
       ),

@@ -1,6 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer_header.dart';
 import 'package:safespace/common/custom_drawer/drawer_tile.dart';
+import 'package:safespace/models/user_manager.dart';
 
 class CustomDrawer extends StatelessWidget {
   @override
@@ -38,11 +42,11 @@ class CustomDrawer extends StatelessWidget {
                 title: 'Minhas Postagens',
                 page: 2,
               ),
-              DrawerTile(
-                iconData: Icons.add_moderator,
-                title: 'Moderação',
-                page: 3,
-              ),
+              // DrawerTile(
+              //   iconData: Icons.add_moderator,
+              //   title: 'Moderação',
+              //   page: 3,
+              // ),
             ],
           ),
         ],
