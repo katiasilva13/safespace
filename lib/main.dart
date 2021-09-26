@@ -22,11 +22,11 @@ class MyApp extends StatelessWidget {
       create: (_) => UserManager(),
       lazy: false,
       child: MaterialApp(
-        title: 'safespace',
+        title: 'SafeSpace',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color(0xffd47ae8),
-          scaffoldBackgroundColor: const Color.fromARGB(255, 71, 218, 238),
+          primaryColor: const Color(0xffda5afd),
+          scaffoldBackgroundColor: const Color(0xff76E2EC),
           appBarTheme: const AppBarTheme(elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
@@ -42,8 +42,8 @@ class MyApp extends StatelessWidget {
             case '/recovery':
               return MaterialPageRoute(builder: (_) => RecoverPass());
             case '/base':
+              return MaterialPageRoute(builder: (_) => BaseScreen());
             default:
-              // return MaterialPageRoute(builder: (_) => BaseScreen());
             return MaterialPageRoute(builder: (_) => LoginScreen());
           }
         },
