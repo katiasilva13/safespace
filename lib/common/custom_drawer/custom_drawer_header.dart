@@ -15,7 +15,7 @@ class CustomDrawerHeader extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
               Text(
-                'safespace',
+                'SafeSpace',
                 style: TextStyle(
                   fontSize: 34,
                   fontWeight: FontWeight.bold,
@@ -34,6 +34,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 onTap: () {
                   if (userManager.isLoggedIn) {
                     userManager.signOut();
+                    Navigator.of(context).pushNamed('/login');
                   } else {
                     Navigator.of(context).pushNamed('/login');
                   }

@@ -34,13 +34,13 @@ class CustomDrawer extends StatelessWidget {
                 page: 1,
               ),
               DrawerTile(
-                iconData: Icons.playlist_add_check,
-                title: 'Viagens',
+                iconData: Icons.feed,
+                title: 'Minhas Postagens',
                 page: 2,
               ),
               DrawerTile(
-                iconData: Icons.location_on,
-                title: 'Teste',
+                iconData: Icons.add_moderator,
+                title: 'Moderação',
                 page: 3,
               ),
             ],

@@ -22,25 +22,25 @@ class BaseScreen extends StatelessWidget {
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home teste'),
+              title: const Text('Feed'),
             ),
           ),
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home2'),
+              title: const Text('Meu Perfil'),
             ),
           ),
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home3'),
+              title: const Text('Minhas Postagens'),
             ),
           ),
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Home4'),
+              title: const Text('Moderação'),
             ),
           ),
         ],
