@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:convert';
+import 'dart:developer' as developer;
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -27,7 +31,7 @@ class _MyPostsState extends State<MyPosts> {
 
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db
-        .collection("posts")
+        .collection("my_posts")
         .document(_idUsuarioLogado)
         .collection("posts")
         .snapshots();
@@ -86,6 +90,13 @@ class _MyPostsState extends State<MyPosts> {
                   case ConnectionState.done:
                     QuerySnapshot querySnapshot = snapshot.data;
 
+                    stderr.writeln('my_posts');
+                    developer.log(querySnapshot.documents.toString());
+                    // developer.log(
+                    //   'log me',
+                    //   name:  jsonEncode(querySnapshot),
+                    // );
+
                     if (querySnapshot.documents.length == 0) {
                       return Container(
                         padding: EdgeInsets.all(25),
@@ -96,7 +107,40 @@ class _MyPostsState extends State<MyPosts> {
                           ),
                         ),
                       );
+                    } else { //TODO remover else e trazer dados dos documents pra tela
+                      return Container(
+                        padding: EdgeInsets.all(25),
+                        child: Text(
+                          "Em construção...",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      );
                     }
+
+                // return Expanded(
+                //   child: ListView.builder(
+                //       itemCount: querySnapshot.documents.length,
+                //       itemBuilder: (_, indice) {
+                //         List<DocumentSnapshot> posts =
+                //         querySnapshot.documents.toList();
+                //         DocumentSnapshot documentSnapshot = posts[indice];
+                //         Post post =
+                //         Post.fromDocumentSnapshot(
+                //             documentSnapshot);
+                //         return ItemPosts(
+                //           posts: post,
+                //           onTapItem: () {
+                //             Navigator.push(
+                //                 context,
+                //                 MaterialPageRoute(
+                //                     builder: (context) => DetailScreen(
+                //                         post)));
+                //           },
+                //         );
+                //       }),
+                // );
                 }
                 return Container();
               },

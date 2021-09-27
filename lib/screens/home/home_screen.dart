@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:convert';
+import 'dart:developer' as developer;
+
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,16 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<Stream<QuerySnapshot>> _addFeedListener() async {
-    //   Firestore db = Firestore.instance;
-    //   Stream<QuerySnapshot> stream = db
-    //       .collection("posts")
-    //       .document(_idUsuarioLogado)
-    //       .collection("posts")
-    //       .snapshots();
-    //
-    //   stream.listen((dados) {
-    //     _controller.add(dados);
-    //   });
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db.collection("posts").snapshots();
 
@@ -82,11 +76,28 @@ class _HomeScreenState extends State<HomeScreen> {
                   case ConnectionState.done:
                     QuerySnapshot querySnapshot = snapshot.data;
 
+                    stderr.writeln('my_posts');
+                    developer.log('querySnapshot', name: querySnapshot.toString());
+                    // developer.log(
+                    //   'log me',
+                    //   name: jsonEncode(querySnapshot),
+                    // );
+
                     if (querySnapshot.documents.length == 0) {
                       return Container(
                         padding: EdgeInsets.all(25),
                         child: Text(
                           "Nenhuma postagem",
+                          style: TextStyle(
+                            fontSize: 20,
+                          ),
+                        ),
+                      );
+                    } else { //TODO remover else e trazer dados dos documents pra tela
+                      return Container(
+                        padding: EdgeInsets.all(25),
+                        child: Text(
+                          "Em construção...",
                           style: TextStyle(
                             fontSize: 20,
                           ),
@@ -105,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     //         Post.fromDocumentSnapshot(
                     //             documentSnapshot);
                     //         return ItemPosts(
-                    //           viagens: post,
+                    //           posts: post,
                     //           onTapItem: () {
                     //             Navigator.push(
                     //                 context,
