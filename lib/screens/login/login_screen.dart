@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safespace/helpers/validators.dart';
@@ -13,6 +16,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    developer.log('log me', name: context.toString());
     return Scaffold(
       key: scaffoldKey,
       body: Container(
@@ -88,7 +93,9 @@ class LoginScreen extends StatelessWidget {
                                               ));
                                             },
                                             onSuccess: () {
-                                              Navigator.of(context).pop();
+                                              Navigator.of(context)
+                                                  .pushReplacementNamed(
+                                                  '/base');
                                             });
                                       }
                                     },

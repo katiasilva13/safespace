@@ -1,3 +1,7 @@
+import 'dart:io';
+import 'dart:convert';
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safespace/models/user_manager.dart';
@@ -8,6 +12,7 @@ import 'package:safespace/screens/signup/signup_screen.dart';
 
 void main() {
   runApp(MyApp());
+  stderr.writeln('print me');
 }
 
 class MyApp extends StatelessWidget {
@@ -17,16 +22,17 @@ class MyApp extends StatelessWidget {
       create: (_) => UserManager(),
       lazy: false,
       child: MaterialApp(
-        title: 'safespace',
+        title: 'SafeSpace',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primaryColor: const Color(0xff990203),
-          scaffoldBackgroundColor: const Color.fromARGB(255, 4, 125, 141),
+          primaryColor: const Color(0xffda5afd),
+          scaffoldBackgroundColor: const Color(0xff76E2EC),
           appBarTheme: const AppBarTheme(elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        initialRoute: '/base',
         onGenerateRoute: (settings) {
+          stderr.writeln('print me = settings');
+          developer.log('log me', name: settings.name);
           switch (settings.name) {
             case '/login':
               return MaterialPageRoute(builder: (_) => LoginScreen());
@@ -35,8 +41,9 @@ class MyApp extends StatelessWidget {
             case '/recovery':
               return MaterialPageRoute(builder: (_) => RecoverPass());
             case '/base':
-            default:
               return MaterialPageRoute(builder: (_) => BaseScreen());
+            default:
+              return MaterialPageRoute(builder: (_) => LoginScreen());
           }
         },
       ),
