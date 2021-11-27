@@ -34,7 +34,7 @@ class CustomDrawer extends StatelessWidget {
               ),
               DrawerTile(
                 iconData: Icons.feed,
-                title: 'Postagens',
+                title: 'Minhas Postagens',
                 page: 1,
               ),
               // DrawerTile(

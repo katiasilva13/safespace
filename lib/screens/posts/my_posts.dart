@@ -13,29 +13,29 @@ class MyPosts extends StatefulWidget {
 }
 
 class _MyPostsState extends State<MyPosts> {
-  String _idUsuarioLogado;
+  String _idLoggedUser;
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
-  _recuperarDadosUsuarioLogado() async {
+  _recoverLoggeduserData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseUser usuarioLogado = await auth.currentUser();
-    _idUsuarioLogado = usuarioLogado.uid;
+    FirebaseUser loggedUser = await auth.currentUser();
+    _idLoggedUser = loggedUser.uid;
   }
 
   Future<Stream<QuerySnapshot>> _addMyPostsListener() async {
-    await _recuperarDadosUsuarioLogado();
+    await _recoverLoggeduserData();
 
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db
         .collection("my_posts")
-        .document(_idUsuarioLogado)
-        .collection("posts")
+        .document(_idLoggedUser)
+        .collection("posts")//zSCmDmqknkcTmkDs2SiSFlugCAD3
         .snapshots();
-
+//I0ZKAegfsBk7ZPm8VNCE
     stream.listen((dados) {
       _controller.add(dados);
     });
@@ -107,7 +107,8 @@ class _MyPostsState extends State<MyPosts> {
                           ),
                         ),
                       );
-                    } else { //TODO remover else e trazer dados dos documents pra tela
+                    } else {
+                      //TODO remover else e trazer dados dos documents pra tela
                       return Container(
                         padding: EdgeInsets.all(25),
                         child: Text(
@@ -119,28 +120,28 @@ class _MyPostsState extends State<MyPosts> {
                       );
                     }
 
-                // return Expanded(
-                //   child: ListView.builder(
-                //       itemCount: querySnapshot.documents.length,
-                //       itemBuilder: (_, indice) {
-                //         List<DocumentSnapshot> posts =
-                //         querySnapshot.documents.toList();
-                //         DocumentSnapshot documentSnapshot = posts[indice];
-                //         Post post =
-                //         Post.fromDocumentSnapshot(
-                //             documentSnapshot);
-                //         return ItemPosts(
-                //           posts: post,
-                //           onTapItem: () {
-                //             Navigator.push(
-                //                 context,
-                //                 MaterialPageRoute(
-                //                     builder: (context) => DetailScreen(
-                //                         post)));
-                //           },
-                //         );
-                //       }),
-                // );
+                  // return Expanded(
+                  //   child: ListView.builder(
+                  //       itemCount: querySnapshot.documents.length,
+                  //       itemBuilder: (_, indice) {
+                  //         List<DocumentSnapshot> posts =
+                  //         querySnapshot.documents.toList();
+                  //         DocumentSnapshot documentSnapshot = posts[indice];
+                  //         Post post =
+                  //         Post.fromDocumentSnapshot(
+                  //             documentSnapshot);
+                  //         return ItemPosts(
+                  //           posts: post,
+                  //           onTapItem: () {
+                  //             Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                     builder: (context) => DetailScreen(
+                  //                         post)));
+                  //           },
+                  //         );
+                  //       }),
+                  // );
                 }
                 return Container();
               },
