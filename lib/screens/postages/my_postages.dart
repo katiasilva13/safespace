@@ -7,6 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safespace/models/postage.dart';
+import 'package:safespace/screens/postages/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
 
 class MyPostages extends StatefulWidget {
@@ -16,6 +17,7 @@ class MyPostages extends StatefulWidget {
 
 class _MyPostagesState extends State<MyPostages> {
   String _idLoggedUser;
+  String _permission;
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
 
@@ -26,10 +28,17 @@ class _MyPostagesState extends State<MyPostages> {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser loggedUser = await auth.currentUser();
     _idLoggedUser = loggedUser.uid;
+
+    Firestore db = Firestore.instance;
+    DocumentSnapshot snapshot =
+        await db.collection("users").document(_idLoggedUser).get();
+    Map<String, dynamic> dados = snapshot.data;
+
+    return dados["permission"];
   }
 
   Future<Stream<QuerySnapshot>> _addMyPostagesListener() async {
-    await _recoverLoggedUserData();
+    _permission = await _recoverLoggedUserData();
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db
         .collection("my_posts")
@@ -94,71 +103,78 @@ class _MyPostagesState extends State<MyPostages> {
                 if (snapshot.hasError) return Text("Erro ao carregar dados");
 
                 QuerySnapshot querySnapshot = snapshot.data;
-    return Container(
-      child: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        child: ListView.builder(
-            itemCount: querySnapshot.documents.length,
-            itemBuilder: (_, indice) {
-              List<DocumentSnapshot> viagens =
-              querySnapshot.documents.toList();
-              DocumentSnapshot documentSnapshot = viagens[indice];
-              Postage registerViagens =
-              Postage.fromDocumentSnapshot(
-                  documentSnapshot);
-              return PostageItem(
-                postages: registerViagens,
-                onPreddedRemover: () {
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          title: Text("Confirmar"),
-                          content: Text(
-                              "Deseja realmente excluir o viagem?"),
-                          actions: <Widget>[
-                            FlatButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  "Cancelar",
-                                  style:
-                                  TextStyle(color: Colors.grey),
-                                )),
-                            FlatButton(
-                                color: Colors.red,
-                                onPressed: () {
-                                  // _removerAnuncio(
-                                  // registerViagens.id);
-                                  // Navigator.of(context).pop();
-                                },
-                                child: Text(
-                                  "Remover",
-                                  style: TextStyle(
-                                      color: Colors.white),
-                                )),
-                          ],
-                        );
-                      });
-                },
-                onTapItem: () {
-                  // Navigator.push(
-                  // context,
-                  // MaterialPageRoute(
-                  // builder: (context) =>
-                  // EditRegisterScreen(registerViagens)));
-                },
-              );
-            }),
-        onRefresh: refreshMyPostages,
-      ),
-    );
+                return Container(
+                  child: RefreshIndicator(
+                    key: _refreshIndicatorKey,
+                    child: ListView.builder(
+                        itemCount: querySnapshot.documents.length,
+                        itemBuilder: (_, indice) {
+                          List<DocumentSnapshot> viagens =
+                              querySnapshot.documents.toList();
+                          DocumentSnapshot documentSnapshot = viagens[indice];
+                          Postage registerViagens =
+                              Postage.fromDocumentSnapshot(documentSnapshot);
+                          return PostageItem(
+                            postages: registerViagens,
+                            onTapItem: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PostageDetailsScreen(
+                                              registerViagens, _permission)));
+                            },
+                            // onPreddedRemover: () {
+                            //   showDialog(
+                            //       context: context,
+                            //       builder: (context) {
+                            //         return AlertDialog(
+                            //           title: Text("Confirmar"),
+                            //           content: Text(
+                            //               "Deseja realmente excluir o viagem?"),
+                            //           actions: <Widget>[
+                            //             FlatButton(
+                            //                 onPressed: () {
+                            //                   Navigator.of(context).pop();
+                            //                 },
+                            //                 child: Text(
+                            //                   "Cancelar",
+                            //                   style:
+                            //                   TextStyle(color: Colors.grey),
+                            //                 )),
+                            //             FlatButton(
+                            //                 color: Colors.red,
+                            //                 onPressed: () {
+                            //                   // _removerAnuncio(
+                            //                   // registerViagens.id);
+                            //                   // Navigator.of(context).pop();
+                            //                 },
+                            //                 child: Text(
+                            //                   "Remover",
+                            //                   style: TextStyle(
+                            //                       color: Colors.white),
+                            //                 )),
+                            //           ],
+                            //         );
+                            //       });
+                            // },
+                            // onTapItem: () {
+                            //   // Navigator.push(
+                            //   // context,
+                            //   // MaterialPageRoute(
+                            //   // builder: (context) =>
+                            //   // EditRegisterScreen(registerViagens)));
+                            // },
+                          );
+                        }),
+                    onRefresh: refreshMyPostages,
+                  ),
+                );
+            }
+            return Container();
+          },
+        ));
   }
-  return Container();
-},
-));
-}
 }
 
     // return Container(

@@ -107,8 +107,7 @@ class _AllPostagesState extends State<AllPostages> {
                           itemBuilder: (_, indice) {
                             List<DocumentSnapshot> docs =
                                 querySnapshot.documents.toList();
-                            DocumentSnapshot documentSnapshot =
-                                docs[indice];
+                            DocumentSnapshot documentSnapshot = docs[indice];
                             Postage postage =
                                 Postage.fromDocumentSnapshot(documentSnapshot);
                             // List<Postage> postages = docs

@@ -16,6 +16,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _idLoggedUser;
+  String _permission;
+
   final _controller = StreamController<QuerySnapshot>.broadcast();
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
@@ -27,7 +30,21 @@ class _HomeScreenState extends State<HomeScreen> {
     _addFeedListener();
   }
 
+  _recoverUserData() async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    FirebaseUser loggedUser = await auth.currentUser();
+    _idLoggedUser = loggedUser.uid;
+
+    Firestore db = Firestore.instance;
+    DocumentSnapshot snapshot =
+        await db.collection("users").document(_idLoggedUser).get();
+    Map<String, dynamic> dados = snapshot.data;
+
+    return dados["permission"];
+  }
+
   Future<Stream<QuerySnapshot>> _addFeedListener() async {
+    _permission = await _recoverUserData();
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db.collection("posts").snapshots();
 
@@ -79,14 +96,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   case ConnectionState.done:
                     QuerySnapshot querySnapshot = snapshot.data;
 
-                    stderr.writeln('my_posts');
-                    developer.log('querySnapshot',
-                        name: querySnapshot.toString());
-                    // developer.log(
-                    //   'log me',
-                    //   name: jsonEncode(querySnapshot),
-                    // );
-
                     if (querySnapshot.documents.length == 0) {
                       return Container(
                         padding: EdgeInsets.all(25),
@@ -97,46 +106,35 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       );
-                    } else {
-                      //TODO remover else e trazer dados dos documents pra tela
-                      return Container(
-                        padding: EdgeInsets.all(25),
-                        child: Text(
-                          "Em construção...",
-                          style: TextStyle(
-                            fontSize: 20,
-                          ),
-                        ),
-                      );
                     }
 
-                  //   return Expanded(
-                  //     child: ListView.builder(
-                  //         itemCount: querySnapshot.documents.length,
-                  //         itemBuilder: (_, indice) {
-                  //           List<DocumentSnapshot> posts =
-                  //           querySnapshot.documents.toList();
-                  //           // DocumentSnapshot documentSnapshot = posts[indice];
-                  //           // Post post =
-                  //           // Post.fromDocumentSnapshot(
-                  //           //     documentSnapshot);
-                  //                                       List<Postage> postages = posts
-                  //                 .map((e) => Postage.fromDocumentSnapshot(e))
-                  //                 .toList();
-                  //             postages = postages.where((p) => p.hide != true);
-                  //             Postage postage = postages[indice];
-                  //           return PostageItem(
-                  //             postages: postage,
-                  //             onTapItem: () {
-                  //               Navigator.push(
-                  //                   context,
-                  //                   MaterialPageRoute(
-                  //                       builder: (context) => PostageDetailsScreen(
-                  //                           postage,)));
-                  //             },
-                  //           );
-                  //         }),
-                  //   );
+                    return Expanded(
+                      child: ListView.builder(
+                          itemCount: querySnapshot.documents.length,
+                          itemBuilder: (_, indice) {
+                            List<DocumentSnapshot> docs =
+                                querySnapshot.documents.toList();
+                            DocumentSnapshot documentSnapshot = docs[indice];
+                            Postage postage =
+                                Postage.fromDocumentSnapshot(documentSnapshot);
+                            // List<Postage> postages = docs
+                            //     .map((e) => Postage.fromDocumentSnapshot(e))
+                            //     .toList();
+                            // postages = postages.where((p) => p.hide != true);
+                            // Postage postage = postages[indice];
+                            return PostageItem(
+                              postages: postage,
+                              onTapItem: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PostageDetailsScreen(
+                                                postage, _permission)));
+                              },
+                            );
+                          }),
+                    );
                 }
                 return Container();
               },
