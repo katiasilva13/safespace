@@ -34,8 +34,10 @@ class CustomDrawerHeader extends StatelessWidget {
                 onTap: () {
                   if (userManager.isLoggedIn) {
                     userManager.signOut();
+                    Navigator.of(context).pushNamed('/login');
                   }
-                  Navigator.of(context).pushNamed('/login');
+                  // else
+                    // Navigator.of(context).pushNamed('/login');
                 },
                 child: Text(
                   userManager.isLoggedIn ? 'Sair' : 'Entre ou cadastre-se >',

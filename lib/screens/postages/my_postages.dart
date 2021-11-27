@@ -44,6 +44,7 @@ class _MyPostagesState extends State<MyPostages> {
         .collection("my_posts")
         .document(_idLoggedUser)
         .collection("posts")
+        .where('hide', whereIn: [null, false])
         .snapshots();
     stream.listen((dados) {
       _controller.add(dados);
@@ -109,20 +110,20 @@ class _MyPostagesState extends State<MyPostages> {
                     child: ListView.builder(
                         itemCount: querySnapshot.documents.length,
                         itemBuilder: (_, indice) {
-                          List<DocumentSnapshot> viagens =
+                          List<DocumentSnapshot> posts =
                               querySnapshot.documents.toList();
-                          DocumentSnapshot documentSnapshot = viagens[indice];
-                          Postage registerViagens =
+                          DocumentSnapshot documentSnapshot = posts[indice];
+                          Postage postage =
                               Postage.fromDocumentSnapshot(documentSnapshot);
                           return PostageItem(
-                            postages: registerViagens,
+                            postages: postage,
                             onTapItem: () {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) =>
                                           PostageDetailsScreen(
-                                              registerViagens, _permission)));
+                                              postage, _permission)));
                             },
                             // onPreddedRemover: () {
                             //   showDialog(

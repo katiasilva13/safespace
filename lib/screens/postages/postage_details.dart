@@ -225,43 +225,43 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
                   height: 10,
                 )
               ],
-              if (_postage.idUser.compareTo(_idLoggedUser) == 0) ...[
-                Container(
-                  alignment: Alignment.center,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 0, 100, 0),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: EdgeInsets.all(12),
-                          child: Center(
-                            child: AutoSizeText(
-                              "Excluir",
-                              maxLines: 2,
-                              minFontSize: 10,
-                              maxFontSize: 32,
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 22),
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          _delete();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                )
-              ]
+              // if (_postage.idUser.compareTo(_idLoggedUser) == 0) ...[
+              //   Container(
+              //     alignment: Alignment.center,
+              //     child: Row(
+              //       crossAxisAlignment: CrossAxisAlignment.center,
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         GestureDetector(
+              //           child: Container(
+              //             decoration: BoxDecoration(
+              //               color: Color.fromARGB(255, 0, 100, 0),
+              //               borderRadius: BorderRadius.circular(12),
+              //             ),
+              //             padding: EdgeInsets.all(12),
+              //             child: Center(
+              //               child: AutoSizeText(
+              //                 "Excluir",
+              //                 maxLines: 2,
+              //                 minFontSize: 10,
+              //                 maxFontSize: 32,
+              //                 textAlign: TextAlign.center,
+              //                 style:
+              //                     TextStyle(color: Colors.white, fontSize: 22),
+              //               ),
+              //             ),
+              //           ),
+              //           onTap: () {
+              //             _delete();
+              //           },
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              //   SizedBox(
+              //     height: 10,
+              //   )
+              // ]
             ],
           ),
         ],

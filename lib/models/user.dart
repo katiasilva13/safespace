@@ -30,7 +30,7 @@ class User {
     return {
       'name': name,
       'email': email,
-      'permission': 'DEFAULT',
+      'permission': permission,
       'nickname': nickname,
     };
   }

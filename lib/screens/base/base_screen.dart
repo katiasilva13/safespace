@@ -8,6 +8,7 @@ import 'package:safespace/models/page_manager.dart';
 import 'package:safespace/screens/home/home_screen.dart';
 import 'package:safespace/screens/postages/all_postages.dart';
 import 'package:safespace/screens/postages/my_postages.dart';
+import 'package:safespace/screens/user/profile_screen.dart';
 
 class BaseScreen extends StatelessWidget {
   final PageController pageController = PageController();
@@ -35,13 +36,13 @@ class BaseScreen extends StatelessWidget {
             ),
             body: MyPostages(),
           ),
-          // Scaffold(
-          //   drawer: CustomDrawer(),
-          //   appBar: AppBar(
-          //     title: const Text('Meu Perfil'),
-          //   ),
-          //   body: HomeScreen(), //TODO alterar body para redirecionar para o perfil
-          // ),
+          Scaffold(
+            drawer: CustomDrawer(),
+            appBar: AppBar(
+              title: const Text('Meu Perfil'),
+            ),
+            body: ProfileScreen(), //TODO alterar body para redirecionar para o perfil
+          ),
           // Scaffold(
           //   drawer: CustomDrawer(),
           //   appBar: AppBar(

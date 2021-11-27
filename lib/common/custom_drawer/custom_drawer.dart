@@ -74,11 +74,11 @@ class CustomDrawer extends StatelessWidget {
                           title: 'Minhas Postagens',
                           page: 1,
                         ),
-                        //         DrawerTile(
-                        // iconData: Icons.admin_panel_settings,
-                        // title: 'Perfil',
-                        // page: 2,
-                        //         ),
+                                DrawerTile(
+                        iconData: Icons.admin_panel_settings,
+                        title: 'Perfil',
+                        page: 2,
+                                ),
                         //         DrawerTile(
                         // iconData: Icons.add_moderator,
                         // title: 'Moderação',

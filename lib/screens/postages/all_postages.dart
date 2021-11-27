@@ -42,7 +42,9 @@ class _AllPostagesState extends State<AllPostages> {
   Future<Stream<QuerySnapshot>> _addPostagesListener() async {
     _permission = await _recoverUserData();
     Firestore db = Firestore.instance;
-    Stream<QuerySnapshot> stream = db.collection("posts").snapshots();
+    Stream<QuerySnapshot> stream = db
+        .collection("posts")
+        .where('hide', whereIn: [null, false]).snapshots();
     stream.listen((dados) {
       _controller.add(dados);
     });
@@ -132,6 +134,19 @@ class _AllPostagesState extends State<AllPostages> {
                 return Container();
               },
             ),
+            // new Scaffold(
+            //   floatingActionButton: FloatingActionButton(
+            //     foregroundColor: Colors.green,
+            //     child: Icon(
+            //       Icons.add,
+            //       color: Colors.white,
+            //     ),
+            //     onPressed: () {
+            //       // Navigator.push(context,
+            //       //     MaterialPageRoute(builder: (context) => RegisterScreen()));
+            //     },
+            //   )
+            // )
           ],
         ),
         onRefresh: refreshPostages,
