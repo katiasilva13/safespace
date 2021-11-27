@@ -7,12 +7,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class MyPosts extends StatefulWidget {
+class MyPostages extends StatefulWidget {
   @override
-  _MyPostsState createState() => _MyPostsState();
+  _MyPostagesState createState() => _MyPostagesState();
 }
 
-class _MyPostsState extends State<MyPosts> {
+class _MyPostagesState extends State<MyPostages> {
   String _idLoggedUser;
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
@@ -20,42 +20,37 @@ class _MyPostsState extends State<MyPosts> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
-  _recoverLoggeduserData() async {
+  _recoverLoggedUserData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser loggedUser = await auth.currentUser();
     _idLoggedUser = loggedUser.uid;
   }
 
-  Future<Stream<QuerySnapshot>> _addMyPostsListener() async {
-    await _recoverLoggeduserData();
-
+  _addMyPostagesListener() async {
+    await _recoverLoggedUserData();
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db
         .collection("my_posts")
         .document(_idLoggedUser)
-        .collection("posts")//zSCmDmqknkcTmkDs2SiSFlugCAD3
+        .collection("posts")
         .snapshots();
-//I0ZKAegfsBk7ZPm8VNCE
     stream.listen((dados) {
       _controller.add(dados);
     });
   }
 
-  Future<Null> refreshMyPosts() async {
+  refreshMyPostages() async {
     _refreshIndicatorKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
-
     setState(() {
-      _addMyPostsListener();
+      _addMyPostagesListener();
     });
-
-    return null;
   }
 
   @override
   void initState() {
     super.initState();
-    _addMyPostsListener();
+    _addMyPostagesListener();
   }
 
   @override
@@ -130,7 +125,7 @@ class _MyPostsState extends State<MyPosts> {
                   //         Post post =
                   //         Post.fromDocumentSnapshot(
                   //             documentSnapshot);
-                  //         return ItemPosts(
+                  //         return ItemPostages(
                   //           posts: post,
                   //           onTapItem: () {
                   //             Navigator.push(
@@ -148,7 +143,7 @@ class _MyPostsState extends State<MyPosts> {
             ),
           ],
         ),
-        onRefresh: refreshMyPosts,
+        onRefresh: refreshMyPostages,
       ),
     );
   }

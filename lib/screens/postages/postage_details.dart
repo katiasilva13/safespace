@@ -8,7 +8,7 @@ import 'package:rodagem/models/register_viagem.dart';
 import 'package:rodagem/models/user_manager.dart';
 
 class DetailScreen extends StatefulWidget {
-  RegisterViagem viagem;
+  Postage viagem;
   String typeUser;
 
   DetailScreen(this.viagem, this.typeUser);
@@ -18,20 +18,20 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  RegisterViagem _viagem;
+  Postage _viagem;
 
   String _idUsuarioLogado;
   String _typeUser;
 
   List<Widget> _getListaImagens() {
-    List<String> listaUrlImagens = _viagem.fotos;
+    List<String> listaUrlImagens = _viagem.images;
 
     return listaUrlImagens.map((url) {
       return Container(
         height: 250,
         decoration: BoxDecoration(
           image:
-          DecorationImage(image: NetworkImage(url), fit: BoxFit.fitWidth),
+              DecorationImage(image: NetworkImage(url), fit: BoxFit.fitWidth),
         ),
       );
     }).toList();
@@ -156,7 +156,7 @@ class _DetailScreenState extends State<DetailScreen> {
                       ),
                     ),
                     Text(
-                      "${_viagem.dataChegada}",
+                      "${_viagem.sendDate}",
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -221,7 +221,7 @@ class _DetailScreenState extends State<DetailScreen> {
                               maxFontSize: 32,
                               textAlign: TextAlign.center,
                               style:
-                              TextStyle(color: Colors.white, fontSize: 22),
+                                  TextStyle(color: Colors.white, fontSize: 22),
                             ),
                           ),
                         ),

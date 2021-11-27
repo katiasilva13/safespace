@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer.dart';
 import 'package:safespace/models/page_manager.dart';
 import 'package:safespace/screens/home/home_screen.dart';
-import 'package:safespace/screens/posts/my_posts.dart';
+import 'package:safespace/screens/postages/my_postages.dart';
 
 class BaseScreen extends StatelessWidget {
   final PageController pageController = PageController();
@@ -33,7 +33,7 @@ class BaseScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Minhas Postagens'),
             ),
-            body: MyPosts(),
+            body: MyPostages(),
           ),
           // Scaffold(
           //   drawer: CustomDrawer(),

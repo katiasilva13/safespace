@@ -2,88 +2,69 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:rodagem/models/register_viagem.dart';
-import 'package:rodagem/screens/viagens/detail_viagem.dart';
-import 'package:rodagem/widget/item_viagem.dart';
+import 'package:safespace/models/postage.dart';
+// import 'package:safespace/screens/postages/postage_details.dart';
+// import 'package:safespace/widget/postage_item.dart';
 
-class AllViagens extends StatefulWidget {
+class AllPostages extends StatefulWidget {
   @override
-  _AllViagensState createState() => _AllViagensState();
+  _AllPostagesState createState() => _AllPostagesState();
 }
 
-class _AllViagensState extends State<AllViagens> {
-  String _idUsuarioLogado;
-  String _typeUser;
+class _AllPostagesState extends State<AllPostages> {
+  String _idLoggedUser;
+  String _permission;
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-  GlobalKey<RefreshIndicatorState>();
+      GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    _adicionarListenerViagens();
+    _addPostagesListener();
   }
 
-  _recuperarDadosUsuario() async {
+  _recoverUserData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser usuarioLogado = await auth.currentUser();
-    _idUsuarioLogado = usuarioLogado.uid;
+    _idLoggedUser = usuarioLogado.uid;
 
     Firestore db = Firestore.instance;
     DocumentSnapshot snapshot =
-    await db.collection("users").document(_idUsuarioLogado).get();
-
+        await db.collection("users").document(_idLoggedUser).get();
     Map<String, dynamic> dados = snapshot.data;
 
-    return dados["typeUser"];
+    return dados["permission"];
   }
 
-  Future<Stream<QuerySnapshot>> _adicionarListenerViagens() async {
-    _typeUser = await _recuperarDadosUsuario();
-
-    if (_typeUser == "motorista") {
-      Firestore db = Firestore.instance;
-      Stream<QuerySnapshot> stream = db
-          .collection("minhas_viagens")
-          .document(_idUsuarioLogado)
-          .collection("viagens")
-          .snapshots();
-
-      stream.listen((dados) {
-        _controller.add(dados);
-      });
-    } else if (_typeUser == "transportadora") {
-      Firestore db = Firestore.instance;
-      Stream<QuerySnapshot> stream = db.collection("viagens").snapshots();
-
-      stream.listen((dados) {
-        _controller.add(dados);
-      });
-    }
+  _addPostagesListener() async {
+    _permission = await _recoverUserData();
+    Firestore db = Firestore.instance;
+    Stream<QuerySnapshot> stream = db.collection("posts").snapshots();
+    stream.listen((dados) {
+      _controller.add(dados);
+    });
   }
 
-  Future<Null> refreshViagem() async {
+  refreshPostages() async {
     _refreshIndicatorKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
-
     setState(() {
-      _adicionarListenerViagens();
+      _addPostagesListener();
     });
-
-    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    var carregandoDados = Center(
+    var loadingData = Center(
       child: Column(
         children: <Widget>[
           SizedBox(
             height: 20,
           ),
-          Text("Carregando Viagens"),
+          Text("Carregando postagens"),
           CircularProgressIndicator(),
         ],
       ),
@@ -101,7 +82,7 @@ class _AllViagensState extends State<AllViagens> {
                 switch (snapshot.connectionState) {
                   case ConnectionState.none:
                   case ConnectionState.waiting:
-                    return carregandoDados;
+                    return loadingData;
                     break;
                   case ConnectionState.active:
                   case ConnectionState.done:
@@ -111,7 +92,7 @@ class _AllViagensState extends State<AllViagens> {
                       return Container(
                         padding: EdgeInsets.all(25),
                         child: Text(
-                          "Nenhuma viagem",
+                          "Nenhuma postagem",
                           style: TextStyle(
                             fontSize: 20,
                           ),
@@ -124,19 +105,18 @@ class _AllViagensState extends State<AllViagens> {
                           itemCount: querySnapshot.documents.length,
                           itemBuilder: (_, indice) {
                             List<DocumentSnapshot> viagens =
-                            querySnapshot.documents.toList();
+                                querySnapshot.documents.toList();
                             DocumentSnapshot documentSnapshot = viagens[indice];
-                            RegisterViagem registerViagem =
-                            RegisterViagem.fromDocumentSnapshot(
-                                documentSnapshot);
+                            Postage postage =
+                                Postage.fromDocumentSnapshot(documentSnapshot);
                             return ItemViagens(
-                              viagens: registerViagem,
+                              viagens: postage,
                               onTapItem: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => DetailScreen(
-                                            registerViagem, _typeUser)));
+                                            postage, _permission)));
                               },
                             );
                           }),
@@ -147,7 +127,7 @@ class _AllViagensState extends State<AllViagens> {
             ),
           ],
         ),
-        onRefresh: refreshViagem,
+        onRefresh: refreshPostages,
       ),
     );
   }

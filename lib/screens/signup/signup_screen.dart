@@ -37,14 +37,13 @@ class SignUpScreen extends StatelessWidget {
                     shrinkWrap: true,
                     children: <Widget>[
                       TextFormField(
-                        decoration:
-                            const InputDecoration(hintText: 'Nome Completo'),
+                        decoration: const InputDecoration(hintText: 'Nome'),
                         enabled: !userManager.loading,
                         validator: (name) {
                           if (name.isEmpty)
                             return 'Campo obrigatório';
                           else if (name.trim().split(' ').length <= 1)
-                            return 'Preencha seu Nome completo';
+                            return 'Preencha seu nome';
                           return null;
                         },
                         onSaved: (name) => user.name = name,
@@ -53,13 +52,28 @@ class SignUpScreen extends StatelessWidget {
                         height: 16,
                       ),
                       TextFormField(
-                        decoration: const InputDecoration(hintText: 'E-mail'),
+                        decoration: const InputDecoration(hintText: 'Usuário'),
+                        enabled: !userManager.loading,
+                        validator: (nickname) {
+                          if (nickname.isEmpty)
+                            return 'Campo obrigatório';
+                          else if (nickname.trim().split(' ').length <= 1)
+                            return 'Preencha seu nome de usuário';
+                          return null;
+                        },
+                        onSaved: (nickname) => user.nickname = nickname,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      TextFormField(
+                        decoration: const InputDecoration(hintText: 'Email'),
                         keyboardType: TextInputType.emailAddress,
                         enabled: !userManager.loading,
                         validator: (email) {
                           if (email.isEmpty)
                             return 'Campo obrigatório';
-                          else if (!emailValid(email)) return 'E-mail inválido';
+                          else if (!emailValid(email)) return 'Email inválido';
                           return null;
                         },
                         onSaved: (email) => user.email = email,

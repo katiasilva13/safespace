@@ -77,7 +77,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     QuerySnapshot querySnapshot = snapshot.data;
 
                     stderr.writeln('my_posts');
-                    developer.log('querySnapshot', name: querySnapshot.toString());
+                    developer.log('querySnapshot',
+                        name: querySnapshot.toString());
                     // developer.log(
                     //   'log me',
                     //   name: jsonEncode(querySnapshot),
@@ -93,7 +94,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       );
-                    } else { //TODO remover else e trazer dados dos documents pra tela
+                    } else {
+                      //TODO remover else e trazer dados dos documents pra tela
                       return Container(
                         padding: EdgeInsets.all(25),
                         child: Text(
@@ -105,28 +107,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
 
-                    // return Expanded(
-                    //   child: ListView.builder(
-                    //       itemCount: querySnapshot.documents.length,
-                    //       itemBuilder: (_, indice) {
-                    //         List<DocumentSnapshot> posts =
-                    //         querySnapshot.documents.toList();
-                    //         DocumentSnapshot documentSnapshot = posts[indice];
-                    //         Post post =
-                    //         Post.fromDocumentSnapshot(
-                    //             documentSnapshot);
-                    //         return ItemPosts(
-                    //           posts: post,
-                    //           onTapItem: () {
-                    //             Navigator.push(
-                    //                 context,
-                    //                 MaterialPageRoute(
-                    //                     builder: (context) => DetailScreen(
-                    //                         post)));
-                    //           },
-                    //         );
-                    //       }),
-                    // );
+                  // return Expanded(
+                  //   child: ListView.builder(
+                  //       itemCount: querySnapshot.documents.length,
+                  //       itemBuilder: (_, indice) {
+                  //         List<DocumentSnapshot> posts =
+                  //         querySnapshot.documents.toList();
+                  //         DocumentSnapshot documentSnapshot = posts[indice];
+                  //         Post post =
+                  //         Post.fromDocumentSnapshot(
+                  //             documentSnapshot);
+                  //         return ItemPostages(
+                  //           posts: post,
+                  //           onTapItem: () {
+                  //             Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                     builder: (context) => DetailScreen(
+                  //                         post)));
+                  //           },
+                  //         );
+                  //       }),
+                  // );
                 }
                 return Container();
               },
