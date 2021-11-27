@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer.dart';
 import 'package:safespace/models/page_manager.dart';
-import 'package:safespace/screens/home/home_screen.dart';
+// import 'package:safespace/screens/home/home_screen.dart';
 import 'package:safespace/screens/postages/all_postages.dart';
 import 'package:safespace/screens/postages/my_postages.dart';
-import 'package:safespace/screens/user/profile_screen.dart';
+import 'package:safespace/screens/profile/profile_screen.dart';
 
 class BaseScreen extends StatelessWidget {
   final PageController pageController = PageController();
@@ -27,12 +27,12 @@ class BaseScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Home'),
             ),
-            body: AllPostages(), // HomeScreen(),
+            body: AllPostages(),
           ),
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Minhas Postagens'),
+              title: const Text('Postagens'),
             ),
             body: MyPostages(),
           ),
@@ -41,7 +41,7 @@ class BaseScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Meu Perfil'),
             ),
-            body: ProfileScreen(), //TODO alterar body para redirecionar para o perfil
+            body: ProfileScreen(),
           ),
           // Scaffold(
           //   drawer: CustomDrawer(),

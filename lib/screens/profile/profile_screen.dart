@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:safespace/screens/edit_profile.dart';
+// import 'package:safespace/screens/profile/edit_profile.dart';
+// import 'package:safespace/screens/postages/my_postages.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -9,39 +10,34 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
-  String _idUsuarioLogado;
-  String _nomeUsuario;
-  String _urlImagemRecuperada;
-  String _emailUsuario;
+  String _idLoggedUser;
+  String _name;
+  String _recoveredImageUrl;
   String _nickname;
 
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = GlobalKey<RefreshIndicatorState>();
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
 
   _recuperarDadosUsuario() async {
     FirebaseAuth auth = FirebaseAuth.instance;
     FirebaseUser usuarioLogado = await auth.currentUser();
-    _idUsuarioLogado = usuarioLogado.uid;
+    _idLoggedUser = usuarioLogado.uid;
 
     Firestore db = Firestore.instance;
-    DocumentSnapshot snapshot = await db.collection("users")
-        .document(_idUsuarioLogado)
-        .get();
+    DocumentSnapshot snapshot =
+        await db.collection("users").document(_idLoggedUser).get();
 
     Map<String, dynamic> dados = snapshot.data;
 
     setState(() {
-      _emailUsuario = dados["email"];
-      _nomeUsuario = dados["name"];
       _nickname = dados["nickname"];
+      _name = dados["name"];
     });
 
-    if(dados["photo"] != null) {
-
+    if (dados["photo"] != null) {
       setState(() {
-        _urlImagemRecuperada = dados["photo"];
+        _recoveredImageUrl = dados["photo"];
       });
-
     }
   }
 
@@ -69,46 +65,47 @@ class _ProfileScreenState extends State<ProfileScreen> {
         key: _refreshIndicatorKey,
         child: SingleChildScrollView(
           physics: AlwaysScrollableScrollPhysics(),
-          padding: EdgeInsets.fromLTRB(2, 2, 2, 2),
+          padding: EdgeInsets.fromLTRB(8, 10, 10, 8),
           child: Column(
             children: [
               InkWell(
                 onTap: () {
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+                  // Navigator.push(context,
+                  // MaterialPageRoute(builder: (context) => EditProfile()));
                 },
                 child: Card(
                   clipBehavior: Clip.antiAlias,
-                  elevation: 5,
+                  elevation: 3,
                   child: Container(
                     padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    height: 200,
+                    height: 150,
                     child: Row(
                       children: [
                         CircleAvatar(
                           maxRadius: 40,
                           backgroundColor: Colors.grey,
-                          backgroundImage: _urlImagemRecuperada != null ? NetworkImage(_urlImagemRecuperada) : null,
+                          backgroundImage: _recoveredImageUrl != null
+                              ? NetworkImage(_recoveredImageUrl)
+                              : null,
                         ),
                         Container(
                           height: 100,
                           child: Padding(
-                            padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                            padding: EdgeInsets.fromLTRB(10, 1, 0, 0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(_nomeUsuario != null ? _nomeUsuario : '',style: TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold)),
+                                Text(_name != null ? _name : '',
+                                    style: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold)),
                                 Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
+                                  padding: EdgeInsets.fromLTRB(5, 5, 0, 3),
                                   child: Container(
-                                    child: Text(_emailUsuario != null ? _emailUsuario : '',style: TextStyle(
-                                        fontSize: 14)),
-                                  ),
-                                ), Padding(
-                                  padding: EdgeInsets.fromLTRB(0, 3, 0, 3),
-                                  child: Container(
-                                    child: Text(_nickname != null ? _nickname : '',style: TextStyle(
-                                        fontSize: 14)),
+                                    child: Text(
+                                        _nickname != null ? _nickname : '',
+                                        style: TextStyle(fontSize: 18)),
+                                    
                                   ),
                                 ),
                               ],
@@ -123,6 +120,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: 10,
               ),
+              // RaisedButton(
+              //   onPressed: () {
+              //     // Navigator.push(context,
+              //     // MaterialPageRoute(builder: (context) => EditProfile()));
+              //   },
+              //   color: Colors.white,
+              //   child: Padding(
+              //     padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //       children: <Widget>[
+              //         Text(
+              //           'PERFIL',
+              //           style: TextStyle(
+              //             fontSize: 20,
+              //             color: Colors.black54,
+              //           ),
+              //         ),
+              //         Icon(
+              //           Icons.my_location,
+              //           color: Colors.black,
+              //         )
+              //       ],
+              //     ),
+              //   ),
+              // ),
+              // SizedBox(
+              //   height: 10,
+              // ),
             ],
           ),
         ),
