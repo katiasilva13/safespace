@@ -6,6 +6,9 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:safespace/models/postage.dart';
+import 'package:safespace/screens/postages/postage_details.dart';
+import 'package:safespace/widget/postage_item.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -52,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          Text("Carregando postagens"),
+          Text("Carregando..."),
           CircularProgressIndicator(),
         ],
       ),
@@ -107,28 +110,33 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     }
 
-                  // return Expanded(
-                  //   child: ListView.builder(
-                  //       itemCount: querySnapshot.documents.length,
-                  //       itemBuilder: (_, indice) {
-                  //         List<DocumentSnapshot> posts =
-                  //         querySnapshot.documents.toList();
-                  //         DocumentSnapshot documentSnapshot = posts[indice];
-                  //         Post post =
-                  //         Post.fromDocumentSnapshot(
-                  //             documentSnapshot);
-                  //         return ItemPostages(
-                  //           posts: post,
-                  //           onTapItem: () {
-                  //             Navigator.push(
-                  //                 context,
-                  //                 MaterialPageRoute(
-                  //                     builder: (context) => DetailScreen(
-                  //                         post)));
-                  //           },
-                  //         );
-                  //       }),
-                  // );
+                  //   return Expanded(
+                  //     child: ListView.builder(
+                  //         itemCount: querySnapshot.documents.length,
+                  //         itemBuilder: (_, indice) {
+                  //           List<DocumentSnapshot> posts =
+                  //           querySnapshot.documents.toList();
+                  //           // DocumentSnapshot documentSnapshot = posts[indice];
+                  //           // Post post =
+                  //           // Post.fromDocumentSnapshot(
+                  //           //     documentSnapshot);
+                  //                                       List<Postage> postages = posts
+                  //                 .map((e) => Postage.fromDocumentSnapshot(e))
+                  //                 .toList();
+                  //             postages = postages.where((p) => p.hide != true);
+                  //             Postage postage = postages[indice];
+                  //           return PostageItem(
+                  //             postages: postage,
+                  //             onTapItem: () {
+                  //               Navigator.push(
+                  //                   context,
+                  //                   MaterialPageRoute(
+                  //                       builder: (context) => PostageDetailsScreen(
+                  //                           postage,)));
+                  //             },
+                  //           );
+                  //         }),
+                  //   );
                 }
                 return Container();
               },

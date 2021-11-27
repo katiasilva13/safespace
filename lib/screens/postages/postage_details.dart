@@ -4,29 +4,30 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:rodagem/models/register_viagem.dart';
-import 'package:rodagem/models/user_manager.dart';
+import 'package:safespace/models/postage.dart';
+// import 'package:safespace/models/user_manager.dart';
+import 'package:safespace/enumerator/permission.dart';
 
-class DetailScreen extends StatefulWidget {
-  Postage viagem;
-  String typeUser;
+class PostageDetailsScreen extends StatefulWidget {
+  Postage postage;
+  String permission;
 
-  DetailScreen(this.viagem, this.typeUser);
+  PostageDetailsScreen(this.postage, this.permission);
 
   @override
-  _DetailScreenState createState() => _DetailScreenState();
+  _PostageDetailsScreenState createState() => _PostageDetailsScreenState();
 }
 
-class _DetailScreenState extends State<DetailScreen> {
-  Postage _viagem;
+class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
+  Postage _postage;
 
-  String _idUsuarioLogado;
-  String _typeUser;
+  String _idLoggedUser;
+  String _permission;
 
-  List<Widget> _getListaImagens() {
-    List<String> listaUrlImagens = _viagem.images;
+  List<Widget> _getImageList() {
+    List<String> imageUrlList = _postage.images;
 
-    return listaUrlImagens.map((url) {
+    return imageUrlList.map((url) {
       return Container(
         height: 250,
         decoration: BoxDecoration(
@@ -37,32 +38,53 @@ class _DetailScreenState extends State<DetailScreen> {
     }).toList();
   }
 
-  _receberViagem() {
-    String statusPagamento = "Viagem Paga";
+  _report() {
     Firestore db = Firestore.instance;
-
-    Map<String, dynamic> dadosAtualizar = {"statusPagamento": statusPagamento};
-
+    Map<String, dynamic> updateData = {"reported": true, "hide": true};
     db
-        .collection("viagens")
-        .document(_viagem.id)
-        .updateData(dadosAtualizar)
+        .collection("posts")
+        .document(_postage.id)
+        .updateData(updateData)
         .then((_) {
       Navigator.of(context).pushReplacementNamed('/base');
     });
   }
 
-  _recuperarDadosUsuario() async {
+  _block() {
+    Firestore db = Firestore.instance;
+    Map<String, dynamic> updateData = {"block": true, "hide": true};
+    db
+        .collection("posts")
+        .document(_postage.id)
+        .updateData(updateData)
+        .then((_) {
+      Navigator.of(context).pushReplacementNamed('/base');
+    });
+  }
+
+  _delete() {
+    Firestore db = Firestore.instance;
+    Map<String, dynamic> updateData = {"deleted": true, "hide": true};
+    db
+        .collection("posts")
+        .document(_postage.id)
+        .updateData(updateData)
+        .then((_) {
+      Navigator.of(context).pushReplacementNamed('/base');
+    });
+  }
+
+  _recoverLoggedUserData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseUser usuarioLogado = await auth.currentUser();
-    _idUsuarioLogado = usuarioLogado.uid;
+    FirebaseUser loggedUser = await auth.currentUser();
+    _idLoggedUser = loggedUser.uid;
   }
 
   _initialize() async {
-    _viagem = widget.viagem;
-    _typeUser = widget.typeUser;
+    _postage = widget.postage;
+    _permission = widget.permission;
 
-    await _recuperarDadosUsuario();
+    await _recoverLoggedUserData();
   }
 
   @override
@@ -75,7 +97,7 @@ class _DetailScreenState extends State<DetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Viagem"),
+        title: Text("Postagem"),
       ),
       body: Stack(
         children: [
@@ -84,7 +106,7 @@ class _DetailScreenState extends State<DetailScreen> {
               SizedBox(
                 height: 250,
                 child: Carousel(
-                  images: _getListaImagens(),
+                  images: _getImageList(),
                   dotSize: 8,
                   dotBgColor: Colors.transparent,
                   dotColor: Colors.black,
@@ -98,48 +120,14 @@ class _DetailScreenState extends State<DetailScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "R\$ ${_viagem.valor}",
-                      style: TextStyle(
-                          fontSize: 32,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green),
-                    ),
-                    Text(
-                      "${_viagem.statusPagamento}",
-                      style: TextStyle(
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                          color: _viagem.statusPagamento == "Sem Pagamento"
-                              ? Colors.red
-                              : Colors.green),
-                    ),
-                    Text(
-                      "${_viagem.empresa}",
-                      style: TextStyle(
-                        fontSize: 25,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Text(
-                      "${_viagem.cidade} - ${_viagem.estado}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(),
-                    ),
-                    Text(
-                      "Data Partida",
+                      "Data de postagem",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      "${_viagem.dataPartida}",
+                      "${_postage.sendDate}",
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -149,14 +137,14 @@ class _DetailScreenState extends State<DetailScreen> {
                       child: Divider(),
                     ),
                     Text(
-                      "Data Chegada",
+                      "Post",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      "${_viagem.sendDate}",
+                      "${_postage.message}",
                       style: TextStyle(
                         fontSize: 18,
                       ),
@@ -164,42 +152,43 @@ class _DetailScreenState extends State<DetailScreen> {
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Divider(),
-                    ),
-                    Text(
-                      "Produto",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "${_viagem.produto}",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(),
-                    ),
-                    Text(
-                      "Peso",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "${_viagem.peso}",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
                     ),
                   ],
                 ),
               ),
-              if (_typeUser == "transportadora" &&
-                  _viagem.statusPagamento == "Sem Pagamento") ...[
+              Container(
+                alignment: Alignment.center,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(255, 0, 100, 0),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        padding: EdgeInsets.all(12),
+                        child: Center(
+                          child: AutoSizeText(
+                            "Denunciar",
+                            maxLines: 2,
+                            minFontSize: 10,
+                            maxFontSize: 32,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: Colors.white, fontSize: 22),
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        _report();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              if (PermissionHelper.isDev(_permission) ||
+                  PermissionHelper.isMod(_permission)) ...[
                 Container(
                   alignment: Alignment.center,
                   child: Row(
@@ -215,7 +204,7 @@ class _DetailScreenState extends State<DetailScreen> {
                           padding: EdgeInsets.all(12),
                           child: Center(
                             child: AutoSizeText(
-                              "Receber Viagem",
+                              "Bloquear",
                               maxLines: 2,
                               minFontSize: 10,
                               maxFontSize: 32,
@@ -226,7 +215,44 @@ class _DetailScreenState extends State<DetailScreen> {
                           ),
                         ),
                         onTap: () {
-                          _receberViagem();
+                          _block();
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  height: 10,
+                )
+              ],
+              if (_postage.idUser.compareTo(_idLoggedUser) == 0) ...[
+                Container(
+                  alignment: Alignment.center,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(255, 0, 100, 0),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          padding: EdgeInsets.all(12),
+                          child: Center(
+                            child: AutoSizeText(
+                              "Excluir",
+                              maxLines: 2,
+                              minFontSize: 10,
+                              maxFontSize: 32,
+                              textAlign: TextAlign.center,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 22),
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          _delete();
                         },
                       ),
                     ],

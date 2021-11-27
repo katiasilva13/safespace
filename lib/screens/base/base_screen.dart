@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer.dart';
 import 'package:safespace/models/page_manager.dart';
 import 'package:safespace/screens/home/home_screen.dart';
+import 'package:safespace/screens/postages/all_postages.dart';
 import 'package:safespace/screens/postages/my_postages.dart';
 
 class BaseScreen extends StatelessWidget {
@@ -13,7 +14,6 @@ class BaseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     developer.log('log me', name: context.toString());
     return Provider(
       create: (_) => PageManager(pageController),
@@ -26,7 +26,7 @@ class BaseScreen extends StatelessWidget {
             appBar: AppBar(
               title: const Text('Home'),
             ),
-            body: HomeScreen(),
+            body: AllPostages(), // HomeScreen(),
           ),
           Scaffold(
             drawer: CustomDrawer(),

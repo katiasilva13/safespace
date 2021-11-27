@@ -2,46 +2,64 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Postage {
   String _id;
+  String _idUser;
   String _message;
   DateTime _sendDate;
-  String _location;
   List<String> _images;
   bool _hide;
+  bool _block;
   bool _deleted;
   bool _reported;
+
 
   Postage();
 
   Postage.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
     this.id = documentSnapshot.documentID;
+    this.idUser = documentSnapshot["idUser"];
     this.message = documentSnapshot["message"];
-    this.sendDate = documentSnapshot["sendDate"];
-    this.location = documentSnapshot["location"];
+    // this.sendDate = documentSnapshot["sendDate"];
+    Timestamp t = documentSnapshot['sendDate'];
+    this.sendDate = t.toDate();
     this.images = List<String>.from(documentSnapshot["images"]);
     this.hide = documentSnapshot["hide"];
+    this.block = documentSnapshot["block"];
     this.deleted = documentSnapshot["deleted"];
     this.reported = documentSnapshot["reported"];
   }
 
-  Postage.generateId() {
+  Postage.generateidUser() {
     Firestore db = Firestore.instance;
     CollectionReference postages = db.collection("my_posts");
-    this.id = postages.document().documentID;
+    this.idUser = postages.document().documentID;
     this.images = [];
   }
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> map = {
       "id": this.id,
+      "idUser": this.idUser,
       "sendDate": this.sendDate,
-      "location": this.location,
       "message": this.message,
       "hide": this.hide,
+      "block": this.block,
       "deleted": this.deleted,
       "reported": this.reported,
       "images": this.images
     };
     return map;
+  }
+
+  String get id => _id;
+
+  set id(String value) {
+    _id = value;
+  }
+
+  bool get block => _block;
+
+  set block(bool value) {
+    _block = value;
   }
 
   String get message => _message;
@@ -50,22 +68,16 @@ class Postage {
     _message = value;
   }
 
-  String get location => _location;
-
-  set location(String value) {
-    _location = value;
-  }
-
   List<String> get images => _images;
 
   set images(List<String> value) {
     _images = value;
   }
 
-  String get id => _id;
+  String get idUser => _idUser;
 
-  set id(String value) {
-    _id = value;
+  set idUser(String value) {
+    _idUser = value;
   }
 
   DateTime get sendDate => _sendDate;

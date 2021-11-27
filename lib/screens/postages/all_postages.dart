@@ -3,8 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:safespace/models/postage.dart';
-// import 'package:safespace/screens/postages/postage_details.dart';
-// import 'package:safespace/widget/postage_item.dart';
+import 'package:safespace/screens/postages/postage_details.dart';
+import 'package:safespace/widget/postage_item.dart';
 
 class AllPostages extends StatefulWidget {
   @override
@@ -28,8 +28,8 @@ class _AllPostagesState extends State<AllPostages> {
 
   _recoverUserData() async {
     FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseUser usuarioLogado = await auth.currentUser();
-    _idLoggedUser = usuarioLogado.uid;
+    FirebaseUser loggedUser = await auth.currentUser();
+    _idLoggedUser = loggedUser.uid;
 
     Firestore db = Firestore.instance;
     DocumentSnapshot snapshot =
@@ -39,7 +39,7 @@ class _AllPostagesState extends State<AllPostages> {
     return dados["permission"];
   }
 
-  _addPostagesListener() async {
+  Future<Stream<QuerySnapshot>> _addPostagesListener() async {
     _permission = await _recoverUserData();
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db.collection("posts").snapshots();
@@ -48,12 +48,13 @@ class _AllPostagesState extends State<AllPostages> {
     });
   }
 
-  refreshPostages() async {
+  Future<Null> refreshPostages() async {
     _refreshIndicatorKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
     setState(() {
       _addPostagesListener();
     });
+    return null;
   }
 
   @override
@@ -64,7 +65,7 @@ class _AllPostagesState extends State<AllPostages> {
           SizedBox(
             height: 20,
           ),
-          Text("Carregando postagens"),
+          Text("Carregando"),
           CircularProgressIndicator(),
         ],
       ),
@@ -104,19 +105,26 @@ class _AllPostagesState extends State<AllPostages> {
                       child: ListView.builder(
                           itemCount: querySnapshot.documents.length,
                           itemBuilder: (_, indice) {
-                            List<DocumentSnapshot> viagens =
+                            List<DocumentSnapshot> docs =
                                 querySnapshot.documents.toList();
-                            DocumentSnapshot documentSnapshot = viagens[indice];
+                            DocumentSnapshot documentSnapshot =
+                                docs[indice];
                             Postage postage =
                                 Postage.fromDocumentSnapshot(documentSnapshot);
-                            return ItemViagens(
-                              viagens: postage,
+                            // List<Postage> postages = docs
+                            //     .map((e) => Postage.fromDocumentSnapshot(e))
+                            //     .toList();
+                            // postages = postages.where((p) => p.hide != true);
+                            // Postage postage = postages[indice];
+                            return PostageItem(
+                              postages: postage,
                               onTapItem: () {
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => DetailScreen(
-                                            postage, _permission)));
+                                        builder: (context) =>
+                                            PostageDetailsScreen(
+                                                postage, _permission)));
                               },
                             );
                           }),
