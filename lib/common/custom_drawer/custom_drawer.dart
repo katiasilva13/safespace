@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer_header.dart';
 import 'package:safespace/common/custom_drawer/drawer_tile.dart';
+import 'package:safespace/enumerator/permission.dart';
 import 'package:safespace/models/user_manager.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -59,30 +60,34 @@ class CustomDrawer extends StatelessWidget {
                 title: 'Início',
                 page: 0,
               ),
-              Consumer<UserManager>(
-                builder: (_, userManager, __) {
-                  return Column(
-                    children: <Widget>[
-                      const Divider(),
-                      DrawerTile(
-                        iconData: Icons.feed,
-                        title: 'Minhas Postagens',
-                        page: 1,
-                      ),
-                      DrawerTile(
-                        iconData: Icons.admin_panel_settings,
-                        title: 'Perfil',
-                        page: 2,
-                      ),
-                      DrawerTile(
-                        iconData: Icons.add_moderator,
-                        title: 'Moderação',
-                        page: 3,
-                      ),
-                    ],
-                  );
-                },
-              ),
+              _initialize(),
+              if(!PermissionHelper.isDev(_permission) || !PermissionHelper.isMod(_permission))...[
+                Consumer<UserManager>(
+                  builder: (_, userManager, __) {
+                    return Column(
+                      children: <Widget>[
+                        const Divider(),
+                        DrawerTile(
+                          iconData: Icons.feed,
+                          title: 'Minhas Postagens',
+                          page: 1,
+                        ),
+                        DrawerTile(
+                          iconData: Icons.admin_panel_settings,
+                          title: 'Perfil',
+                          page: 2,
+                        ),
+                        DrawerTile(
+                          iconData: Icons.add_moderator,
+                          title: 'Moderação',
+                          page: 3,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+                ],
+
             ],
           ),
         ],

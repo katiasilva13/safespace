@@ -18,6 +18,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 'SafeSpace',
                 style: TextStyle(
                   fontSize: 34,
+                  fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
                 ),
               ),
