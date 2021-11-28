@@ -12,8 +12,10 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String _idLoggedUser;
   String _name;
-  String _recoveredImageUrl;
+  String _photo;
   String _nickname;
+  String _pronouns;
+  String _block;
   String _bio;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
@@ -38,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (dados["photo"] != null) {
       setState(() {
-        _recoveredImageUrl = dados["photo"];
+        _photo = dados["photo"];
       });
     }
   }
@@ -86,9 +88,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         CircleAvatar(
                           maxRadius: 40,
                           backgroundColor: Colors.grey,
-                          backgroundImage: _recoveredImageUrl != null
-                              ? NetworkImage(_recoveredImageUrl)
-                              : null,
+                          backgroundImage:
+                              _photo != null ? NetworkImage(_photo) : null,
                         ),
                         Container(
                           height: 150,

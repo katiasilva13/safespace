@@ -6,6 +6,9 @@ import 'package:provider/provider.dart';
 import 'package:safespace/models/user_manager.dart';
 import 'package:safespace/screens/base/base_screen.dart';
 import 'package:safespace/screens/login/login_screen.dart';
+import 'package:safespace/screens/moderation/all_blocked.dart';
+import 'package:safespace/screens/moderation/all_reported.dart';
+import 'package:safespace/screens/profile/profile_screen.dart';
 import 'package:safespace/screens/recovery/recovery_pass.dart';
 import 'package:safespace/screens/signup/signup_screen.dart';
 
@@ -37,6 +40,12 @@ class MyApp extends StatelessWidget {
               return MaterialPageRoute(builder: (_) => LoginScreen());
             case '/signup':
               return MaterialPageRoute(builder: (_) => SignUpScreen());
+            case '/profile':
+              return MaterialPageRoute(builder: (_) => ProfileScreen());
+            case '/blocked-posts':
+              return MaterialPageRoute(builder: (_) => AllBlocked());
+            case '/reported-posts':
+              return MaterialPageRoute(builder: (_) => AllReported());
             case '/recovery':
               return MaterialPageRoute(builder: (_) => RecoverPass());
             case '/base':

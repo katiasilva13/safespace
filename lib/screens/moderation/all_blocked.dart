@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:safespace/enumerator/permission.dart';
 import 'package:safespace/models/postage.dart';
-import 'package:safespace/screens/postages/postage_details.dart';
+import 'package:safespace/screens/moderation/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
 
 class AllBlocked extends StatefulWidget {
@@ -47,6 +47,7 @@ class _AllBlockedState extends State<AllBlocked> {
     Stream<QuerySnapshot> stream = db
         .collection("posts")
         .where('block', isEqualTo: true)
+        .where('deleted', isEqualTo: false)
         .snapshots();
     stream.listen((dados) {
       _controller.add(dados);
@@ -94,10 +95,8 @@ class _AllBlockedState extends State<AllBlocked> {
                   case ConnectionState.done:
                     QuerySnapshot querySnapshot = snapshot.data;
 
-
                     SchedulerBinding.instance.addPostFrameCallback((_) {
-
-                      if (PermissionHelper.isDefault(_permission)){
+                      if (PermissionHelper.isDefault(_permission)) {
                         Navigator.of(context).pushReplacementNamed('/base');
                         return null;
                       }
@@ -131,7 +130,7 @@ class _AllBlockedState extends State<AllBlocked> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            PostageDetailsScreen(
+                                            ModeratePostageDetailsScreen(
                                                 postage, _permission)));
                               },
                             );

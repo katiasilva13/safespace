@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:safespace/enumerator/permission.dart';
 import 'package:safespace/models/postage.dart';
-import 'package:safespace/screens/postages/postage_details.dart';
+import 'package:safespace/screens/moderation/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
 
 class AllReported extends StatefulWidget {
@@ -47,6 +47,7 @@ class _AllReportedState extends State<AllReported> {
     Stream<QuerySnapshot> stream = db
         .collection("posts")
         .where('reported', isEqualTo: true)
+        .where('deleted', isEqualTo: false)
         .orderBy('sendDate', descending: true)
         .snapshots();
     stream.listen((dados) {
@@ -96,11 +97,10 @@ class _AllReportedState extends State<AllReported> {
                     QuerySnapshot querySnapshot = snapshot.data;
 
                     SchedulerBinding.instance.addPostFrameCallback((_) {
-
-                    if (PermissionHelper.isDefault(_permission)){
-                      Navigator.of(context).pushReplacementNamed('/base');
-                      return null;
-                    }
+                      if (PermissionHelper.isDefault(_permission)) {
+                        Navigator.of(context).pushReplacementNamed('/base');
+                        return null;
+                      }
                     });
 
                     if (querySnapshot.documents.length == 0) {
@@ -131,7 +131,7 @@ class _AllReportedState extends State<AllReported> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            PostageDetailsScreen(
+                                            ModeratePostageDetailsScreen(
                                                 postage, _permission)));
                               },
                             );
