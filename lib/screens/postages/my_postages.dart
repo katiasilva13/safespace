@@ -19,6 +19,8 @@ class _MyPostagesState extends State<MyPostages> {
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
 
+  final scrollController = ScrollController(initialScrollOffset: 0);
+
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
@@ -63,7 +65,9 @@ class _MyPostagesState extends State<MyPostages> {
   @override
   void initState() {
     super.initState();
-    _addMyPostagesListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addMyPostagesListener();
+    });
   }
 
   @override
@@ -118,16 +122,14 @@ class _MyPostagesState extends State<MyPostages> {
                           return PostageItem(
                             postages: postage,
                             onTapItem: () {
-                              if(_block){
-
-
-                              }else
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          PostageDetailsScreen(
-                                              postage, _permission)));
+                              if (_block) {
+                              } else
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            PostageDetailsScreen(
+                                                postage, _permission)));
                             },
                           );
                         }),

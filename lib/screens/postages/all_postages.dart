@@ -20,10 +20,14 @@ class _AllPostagesState extends State<AllPostages> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
+  final scrollController = ScrollController(initialScrollOffset: 0);
+
   @override
   void initState() {
     super.initState();
-    _addPostagesListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addPostagesListener();
+    });
   }
 
   _recoverUserData() async {

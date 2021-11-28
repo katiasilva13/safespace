@@ -22,11 +22,13 @@ class ModeratePostageDetailsScreen extends StatefulWidget {
 class _ModeratePostageDetailsScreenState
     extends State<ModeratePostageDetailsScreen> {
   Postage _postage;
-  User _author;
+  User _author; //= User();
   int _button;
 
   String _idLoggedUser;
   String _permission;
+
+  final scrollController = ScrollController(initialScrollOffset: 0);
 
   List<Widget> _getImageList() {
     List<String> imageUrlList = _postage.images;
@@ -164,7 +166,9 @@ class _ModeratePostageDetailsScreenState
   @override
   void initState() {
     super.initState();
-    _initialize();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _initialize();
+    });
   }
 
   @override

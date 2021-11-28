@@ -15,6 +15,7 @@ class _EditProfileState extends State<EditProfile> {
   final _nicknameController = TextEditingController();
   final _nameController = TextEditingController();
   final _bioController = TextEditingController();
+  final _pronounsController = TextEditingController();
   File _imagem;
   String _idLoggedUser;
   bool _uploadingImage = false;
@@ -102,12 +103,14 @@ class _EditProfileState extends State<EditProfile> {
     String nickname = _nicknameController.text;
     String name = _nameController.text;
     String bio = _bioController.text;
+    String pronouns = _pronounsController.text;
     Firestore db = Firestore.instance;
 
     Map<String, dynamic> dadosAtualizar = {
       "nickname": nickname,
       "name": name,
-      "bio": bio
+      "bio": bio,
+      "pronouns": pronouns
     };
 
     db
@@ -142,6 +145,7 @@ class _EditProfileState extends State<EditProfile> {
     _nicknameController.text = dados["nickname"];
     _nameController.text = dados["name"];
     _bioController.text = dados["bio"];
+    _pronounsController.text = dados["pronouns"];
 
     if (dados["photo"] != null) {
       setState(() {
@@ -153,7 +157,9 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     super.initState();
-    _recoverUserData();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _recoverUserData();
+    });
   }
 
   @override
@@ -243,13 +249,35 @@ class _EditProfileState extends State<EditProfile> {
                 Padding(
                   padding: EdgeInsets.only(bottom: 0),
                   child: TextFormField(
+                    controller: _pronounsController,
+                    autofocus: true,
+                    keyboardType: TextInputType.name,
+                    style: TextStyle(fontSize: 20),
+                    decoration: InputDecoration(
+                      prefixIcon: Icon(
+                        Icons.edit,
+                        color: Colors.green,
+                      ),
+                      contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                      hintText: "Pronomes",
+                      filled: true,
+                      fillColor: Colors.white,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(bottom: 0),
+                  child: TextFormField(
                     controller: _bioController,
                     autofocus: true,
                     keyboardType: TextInputType.multiline,
                     style: TextStyle(fontSize: 20),
                     decoration: InputDecoration(
                       prefixIcon: Icon(
-                        Icons.edit,
+                        CupertinoIcons.bubble_left,
                         color: Colors.green,
                       ),
                       contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 50),

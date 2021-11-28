@@ -36,6 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _nickname = dados["nickname"];
       _name = dados["name"];
       _bio = dados["bio"];
+      _pronouns = dados["pronouns"];
     });
 
     if (dados["photo"] != null) {
@@ -59,7 +60,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _recuperarDadosUsuario();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _recuperarDadosUsuario();
+    });
   }
 
   @override
@@ -106,7 +109,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   padding: EdgeInsets.fromLTRB(5, 5, 0, 3),
                                   child: Container(
                                     child: Text(
-                                        _nickname != null ? _nickname : '',
+                                        (_nickname != null ? _nickname : '') +
+                                            (_pronouns != null
+                                                ? (' | ' + _pronouns)
+                                                : ''),
                                         style: TextStyle(fontSize: 18)),
                                   ),
                                 ),

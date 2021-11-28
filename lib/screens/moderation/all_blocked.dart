@@ -19,13 +19,17 @@ class _AllBlockedState extends State<AllBlocked> {
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
 
+  final scrollController = ScrollController(initialScrollOffset: 0);
+
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
   @override
   void initState() {
     super.initState();
-    _addPostagesListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addPostagesListener();
+    });
   }
 
   _recoverUserData() async {
