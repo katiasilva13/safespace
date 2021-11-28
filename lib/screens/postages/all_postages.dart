@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:safespace/models/postage/postage.dart';
 import 'package:safespace/screens/postages/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
-import 'package:flutter/src/widgets/scroll_controller.dart';
 
 class AllPostages extends StatefulWidget {
   @override

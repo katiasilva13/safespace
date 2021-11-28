@@ -8,7 +8,6 @@ import 'package:safespace/models/postage/postage.dart';
 import 'package:safespace/enumerator/permission.dart';
 import 'package:intl/intl.dart';
 import 'package:safespace/models/user/user.dart';
-import 'package:flutter/src/widgets/scroll_controller.dart';
 
 class PostageDetailsScreen extends StatefulWidget {
   Postage postage;
@@ -134,7 +133,7 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       _initialize();
     });
   }
@@ -201,9 +200,7 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
                               padding: EdgeInsets.fromLTRB(5, 25, 0, 3),
                               child: Container(
                                 child: Text(
-                                    _author.name != null
-                                        ? _author.name
-                                        : '',
+                                    _author.name != null ? _author.name : '',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),
@@ -214,8 +211,11 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
                               child: Container(
                                 child: Text(
                                     (_author.nickname != null
-                                        ? _author.nickname
-                                        : '') + (_author.pronouns != null ? (' | ' + _author.pronouns) : ''),
+                                            ? _author.nickname
+                                            : '') +
+                                        (_author.pronouns != null
+                                            ? (' | ' + _author.pronouns)
+                                            : ''),
                                     style: TextStyle(fontSize: 13)),
                               ),
                             ),

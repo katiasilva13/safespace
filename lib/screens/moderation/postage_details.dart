@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:safespace/models/postage/postage.dart';
 import 'package:intl/intl.dart';
 import 'package:safespace/models/user/user.dart';
-import 'package:flutter/src/widgets/scroll_controller.dart';
 
 class ModeratePostageDetailsScreen extends StatefulWidget {
   Postage postage;
