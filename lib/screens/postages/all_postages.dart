@@ -44,7 +44,9 @@ class _AllPostagesState extends State<AllPostages> {
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db
         .collection("posts")
-        .where('hide', whereIn: [null, false]).snapshots();
+        .where('hide', whereIn: [null, false])
+        .orderBy('sendDate', descending: true)
+        .snapshots();
     stream.listen((dados) {
       _controller.add(dados);
     });

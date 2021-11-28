@@ -1,18 +1,14 @@
 // import 'dart:convert';
-// import 'package:brasil_fields/brasil_fields.dart';
-// import 'package:brasil_fields/formatter/real_input_formatter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:profanity_filter/profanity_filter.dart';
 // import 'package:commons/commons.dart';
-// import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:safespace/models/postage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
-// import 'package:image_picker/image_picker.dart';
-// import 'package:http/http.dart' as http;
 
 class PostageScreen extends StatefulWidget {
   @override
@@ -26,13 +22,15 @@ class _PostageScreenState extends State<PostageScreen> {
 
   final _formKey = GlobalKey<FormState>();
 
-  final _produtoController = TextEditingController();
+  final _messageController = TextEditingController();
+
+  final filter = ProfanityFilter();
 
   List<File> _imageList = List();
 
   _selectImage() async {
     File selectedImage;
-      selectedImage = await ImagePicker.pickImage(source: ImageSource.gallery);
+    selectedImage = await ImagePicker.pickImage(source: ImageSource.gallery);
 
     if (selectedImage != null) {
       setState(() {
@@ -71,8 +69,7 @@ class _PostageScreenState extends State<PostageScreen> {
     String idLoggedUser = loggedUser.uid;
     _postage.idUser = idLoggedUser;
     _postage.sendDate = DateTime.now();
-    if(_postage.images.length < 1)
-      _postage.images.add('');
+    if (_postage.images.length < 1) _postage.images.add('');
 
     Firestore db = Firestore.instance;
     db
@@ -242,20 +239,27 @@ class _PostageScreenState extends State<PostageScreen> {
                         },
                       ),
                       TextFormField(
+                        // expands: true,
                         onSaved: (message) {
                           _postage.message = message;
                         },
                         maxLines: 50,
                         minLines: 1,
-                        controller: _produtoController,
+                        // maxLines: null,
+                        // minLines: null,
+                        controller: _messageController,
                         keyboardType: TextInputType.text,
                         validator: (text) {
-                          if (text.isEmpty)
+                          if (text.isEmpty) {
                             return "Escreva o conteúdo da sua postagem";
+                          } else {
+                            _messageController.text = filter.censor(text);
+                            return null;
+                          }
                         },
                         style: TextStyle(fontSize: 20),
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
+                          contentPadding: EdgeInsets.fromLTRB(32, 0, 32, 80),
                           hintText: "Post",
                           filled: true,
                           fillColor: Colors.white,

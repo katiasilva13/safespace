@@ -1,7 +1,3 @@
-import 'dart:io';
-import 'dart:convert';
-import 'dart:developer' as developer;
-
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -46,6 +42,7 @@ class _MyPostagesState extends State<MyPostages> {
         .document(_idLoggedUser)
         .collection("posts")
         .where('hide', whereIn: [null, false])
+        .orderBy('sendDate', descending: true)
         .snapshots();
     stream.listen((dados) {
       _controller.add(dados);

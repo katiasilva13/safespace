@@ -10,6 +10,8 @@ class Postage {
   bool _block;
   bool _deleted;
   bool _reported;
+  String nicknameUser;
+  String photoUser;
 
   Postage();
 

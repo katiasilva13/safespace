@@ -57,7 +57,7 @@ class SignUpScreen extends StatelessWidget {
                         validator: (nickname) {
                           if (nickname.isEmpty)
                             return 'Campo obrigatório';
-                          else if (nickname.trim().split(' ').length <= 1)
+                          else if (nickname.trim().length <= 1)
                             return 'Preencha seu nome de usuário';
                           return null;
                         },
@@ -138,7 +138,8 @@ class SignUpScreen extends StatelessWidget {
                                     userManager.signUp(
                                         user: user,
                                         onSuccess: () {
-                                          Navigator.of(context).pop();
+                                          Navigator.of(context)
+                                              .pushReplacementNamed('/base');
                                         },
                                         onFail: (e) {
                                           scaffoldKey.currentState

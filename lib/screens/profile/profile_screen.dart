@@ -1,8 +1,8 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-// import 'package:safespace/screens/profile/edit_profile.dart';
-// import 'package:safespace/screens/postages/my_postages.dart';
+import 'edit_profile.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override
@@ -14,6 +14,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String _name;
   String _recoveredImageUrl;
   String _nickname;
+  String _bio;
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -32,6 +33,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {
       _nickname = dados["nickname"];
       _name = dados["name"];
+      _bio = dados["bio"];
     });
 
     if (dados["photo"] != null) {
@@ -70,15 +72,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: [
               InkWell(
                 onTap: () {
-                  // Navigator.push(context,
-                  // MaterialPageRoute(builder: (context) => EditProfile()));
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => EditProfile()));
                 },
                 child: Card(
                   clipBehavior: Clip.antiAlias,
                   elevation: 3,
                   child: Container(
                     padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                    height: 150,
+                    height: 200,
                     child: Row(
                       children: [
                         CircleAvatar(
@@ -89,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               : null,
                         ),
                         Container(
-                          height: 100,
+                          height: 150,
                           child: Padding(
                             padding: EdgeInsets.fromLTRB(10, 1, 0, 0),
                             child: Column(
@@ -105,7 +107,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Text(
                                         _nickname != null ? _nickname : '',
                                         style: TextStyle(fontSize: 18)),
-
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(5, 5, 0, 3),
+                                  child: Container(
+                                    child: AutoSizeText(
+                                        _bio != null ? _bio : '',
+                                        style: TextStyle(fontSize: 18)),
                                   ),
                                 ),
                               ],
@@ -120,35 +129,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(
                 height: 10,
               ),
-              // RaisedButton(
-              //   onPressed: () {
-              //     // Navigator.push(context,
-              //     // MaterialPageRoute(builder: (context) => EditProfile()));
-              //   },
-              //   color: Colors.white,
-              //   child: Padding(
-              //     padding: EdgeInsets.fromLTRB(20, 20, 20, 20),
-              //     child: Row(
-              //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //       children: <Widget>[
-              //         Text(
-              //           'PERFIL',
-              //           style: TextStyle(
-              //             fontSize: 20,
-              //             color: Colors.black54,
-              //           ),
-              //         ),
-              //         Icon(
-              //           Icons.my_location,
-              //           color: Colors.black,
-              //         )
-              //       ],
-              //     ),
-              //   ),
-              // ),
-              // SizedBox(
-              //   height: 10,
-              // ),
             ],
           ),
         ),

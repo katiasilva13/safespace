@@ -5,7 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:safespace/models/postage.dart';
-// import 'package:safespace/models/user_manager.dart';
 import 'package:safespace/enumerator/permission.dart';
 
 class PostageDetailsScreen extends StatefulWidget {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:safespace/models/postage.dart';
+import 'package:safespace/models/user.dart';
 
 class PostageItem extends StatelessWidget {
   Postage postages;
+  User user;
   VoidCallback onTapItem;
   VoidCallback onPreddedRemover;
 
@@ -18,8 +20,8 @@ class PostageItem extends StatelessWidget {
           child: Row(
             children: [
               SizedBox(
-                width: 120,
-                height: 120,
+                width: 50,
+                height: 50,
                 child: Image.network(
                   postages.images[0],
                   fit: BoxFit.cover,

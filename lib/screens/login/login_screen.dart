@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     developer.log('log me', name: context.toString());
     return Scaffold(
       key: scaffoldKey,
@@ -95,7 +93,7 @@ class LoginScreen extends StatelessWidget {
                                             onSuccess: () {
                                               Navigator.of(context)
                                                   .pushReplacementNamed(
-                                                  '/base');
+                                                      '/base');
                                             });
                                       }
                                     },
