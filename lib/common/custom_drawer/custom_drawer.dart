@@ -60,34 +60,35 @@ class CustomDrawer extends StatelessWidget {
                 title: 'Início',
                 page: 0,
               ),
-              _initialize(),
-              if(!PermissionHelper.isDev(_permission) || !PermissionHelper.isMod(_permission))...[
-                Consumer<UserManager>(
-                  builder: (_, userManager, __) {
-                    return Column(
-                      children: <Widget>[
-                        const Divider(),
-                        DrawerTile(
-                          iconData: Icons.feed,
-                          title: 'Minhas Postagens',
-                          page: 1,
-                        ),
-                        DrawerTile(
-                          iconData: Icons.admin_panel_settings,
-                          title: 'Perfil',
-                          page: 2,
-                        ),
-                        DrawerTile(
-                          iconData: Icons.add_moderator,
-                          title: 'Moderação',
-                          page: 3,
-                        ),
-                      ],
-                    );
-                  },
-                ),
-                ],
-
+              Consumer<UserManager>(
+                builder: (_, userManager, __) {
+                  return Column(
+                    children: <Widget>[
+                      const Divider(),
+                      DrawerTile(
+                        iconData: Icons.feed,
+                        title: 'Minhas Postagens',
+                        page: 1,
+                      ),
+                      DrawerTile(
+                        iconData: Icons.admin_panel_settings,
+                        title: 'Perfil',
+                        page: 2,
+                      ),
+                      DrawerTile(
+                        iconData: Icons.report_rounded,
+                        title: 'Moderação: Denúncias',
+                        page: 3,
+                      ),
+                      DrawerTile(
+                        iconData: Icons.block,
+                        title: 'Moderação: Bloqueados',
+                        page: 4,
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ],

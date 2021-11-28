@@ -14,8 +14,8 @@ class User {
     id = document.documentID;
     name = document.data['name'] as String;
     email = document.data['email'] as String;
-    permission = document.data['permission'] as String;
     nickname = document.data['nickname'] as String;
+    permission = document.data['permission'] as String;
     bio = document.data['bio'] as String;
   }
 
@@ -24,8 +24,8 @@ class User {
   String email;
   String password;
   String confirmPassword;
-  String permission;
   String nickname;
+  String permission;
   String bio;
 
   DocumentReference get firestoreRef =>
@@ -39,8 +39,8 @@ class User {
     return {
       'name': name,
       'email': email,
-      'permission': permission,
       'nickname': nickname,
+      'permission': permission,
       'bio': bio,
     };
   }

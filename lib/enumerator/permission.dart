@@ -1,3 +1,5 @@
+import 'package:safespace/helpers/dart_enum_helper.dart';
+
 enum Permission { DEV, DEFAULT, MOD }
 
 class PermissionHelper {
@@ -6,7 +8,7 @@ class PermissionHelper {
   }
 
   static bool isDefault(String permission) {
-    return (permission.compareTo(Permission.DEFAULT.toString()) == 0);
+    return (permission.compareTo(enumToString(Permission.DEFAULT)) == 0);
   }
 
   static bool isMod(String permission) {

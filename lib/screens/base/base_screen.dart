@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer.dart';
 import 'package:safespace/models/page_manager.dart';
+import 'package:safespace/screens/moderation/all_blocked.dart';
+import 'package:safespace/screens/moderation/all_reported.dart';
 import 'package:safespace/screens/postages/all_postages.dart';
 import 'package:safespace/screens/postages/my_postages.dart';
 import 'package:safespace/screens/profile/profile_screen.dart';
@@ -44,9 +46,16 @@ class BaseScreen extends StatelessWidget {
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Moderação'),
+              title: const Text('Denúncias'),
             ),
-            // body: ModerationScreen(),
+            body: AllReported(),
+          ),
+          Scaffold(
+            drawer: CustomDrawer(),
+            appBar: AppBar(
+              title: const Text('Bloqueados'),
+            ),
+            body: AllBlocked(),
           ),
         ],
       ),
