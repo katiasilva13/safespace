@@ -1,4 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:ui';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:safespace/models/postage.dart';
 import 'package:safespace/enumerator/permission.dart';
+import 'package:intl/intl.dart';
 
 class PostageDetailsScreen extends StatefulWidget {
   Postage postage;
@@ -22,6 +23,7 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
 
   String _idLoggedUser;
   String _permission;
+  int _button;
 
   List<Widget> _getImageList() {
     List<String> imageUrlList = _postage.images;
@@ -79,11 +81,37 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
     _idLoggedUser = loggedUser.uid;
   }
 
+  _getPostAuthor() async {
+    Firestore db = Firestore.instance;
+    DocumentSnapshot snapshot =
+        await db.collection("users").document(_postage.idUser).get();
+
+    Map<String, dynamic> dados = snapshot.data;
+
+    _postage.nameUser = dados["name"];
+    _postage.nicknameUser = dados["nickname"];
+    _postage.photoUser = dados["photo"];
+  }
+
+  _executeAction() {
+    switch (_button) {
+      case 0:
+        _report();
+        break;
+      case 1:
+        _block();
+        break;
+      case 2:
+        _delete();
+        break;
+    }
+  }
+
   _initialize() async {
     _postage = widget.postage;
     _permission = widget.permission;
-
     await _recoverLoggedUserData();
+    await _getPostAuthor();
   }
 
   @override
@@ -97,20 +125,97 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Postagem"),
+        backgroundColor: Colors.deepPurple,
+        actions: [
+          PopupMenuButton(
+              elevation: 20,
+              enabled: true,
+              onSelected: (value) {
+                setState(() {
+                  _button = value;
+                  _executeAction();
+                });
+              },
+              itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Text("Denunciar"),
+                      value: 0,
+                      enabled: (_postage.idUser.compareTo(_idLoggedUser) != 0),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Bloquear"),
+                      value: 1,
+                      enabled: (PermissionHelper.isDev(_permission) ||
+                          PermissionHelper.isMod(_permission)),
+                    ),
+                    PopupMenuItem(
+                      child: Text("Excluir"),
+                      value: 2,
+                      enabled: (_postage.idUser.compareTo(_idLoggedUser) == 0),
+                    )
+                  ])
+        ],
       ),
       body: Stack(
         children: [
           ListView(
             children: [
               SizedBox(
-                height: 250,
+                height: 80,
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      maxRadius: 30,
+                      backgroundColor: Colors.grey,
+                      backgroundImage: _postage.photoUser != null
+                          ? NetworkImage(_postage.photoUser)
+                          : null,
+                    ),
+                    Container(
+                      height: 150,
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(10, 1, 0, 0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(5, 25, 0, 3),
+                              child: Container(
+                                child: Text(
+                                    _postage.nameUser != null
+                                        ? _postage.nameUser
+                                        : '',
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.fromLTRB(5, 1, 0, 3),
+                              child: Container(
+                                child: Text(
+                                    _postage.nicknameUser != null
+                                        ? _postage.nicknameUser
+                                        : '',
+                                    style: TextStyle(fontSize: 13)),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: (_postage.images.first.length > 0) ? 250 : 0,
                 child: Carousel(
                   images: _getImageList(),
                   dotSize: 8,
                   dotBgColor: Colors.transparent,
                   dotColor: Colors.black,
                   autoplay: false,
-                  dotIncreasedColor: Colors.greenAccent,
+                  dotIncreasedColor: Colors.black,
                 ),
               ),
               Container(
@@ -118,23 +223,6 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Data de postagem",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    Text(
-                      "${_postage.sendDate}",
-                      style: TextStyle(
-                        fontSize: 18,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(),
-                    ),
                     Text(
                       "Post",
                       style: TextStyle(
@@ -152,115 +240,22 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Divider(),
                     ),
-                  ],
-                ),
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    GestureDetector(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Color.fromARGB(255, 0, 100, 0),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        padding: EdgeInsets.all(12),
-                        child: Center(
-                          child: AutoSizeText(
-                            "Denunciar",
-                            maxLines: 2,
-                            minFontSize: 10,
-                            maxFontSize: 32,
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 22),
-                          ),
-                        ),
+                    Text(
+                      "Data de postagem",
+                      style: TextStyle(
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
                       ),
-                      onTap: () {
-                        _report();
-                      },
+                    ),
+                    Text(
+                      "${(DateFormat('dd/MM/yyyy H:m:s').format(_postage.sendDate))}",
+                      style: TextStyle(
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
               ),
-              if (PermissionHelper.isDev(_permission) ||
-                  PermissionHelper.isMod(_permission)) ...[
-                Container(
-                  alignment: Alignment.center,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Color.fromARGB(255, 0, 100, 0),
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: EdgeInsets.all(12),
-                          child: Center(
-                            child: AutoSizeText(
-                              "Bloquear",
-                              maxLines: 2,
-                              minFontSize: 10,
-                              maxFontSize: 32,
-                              textAlign: TextAlign.center,
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 22),
-                            ),
-                          ),
-                        ),
-                        onTap: () {
-                          _block();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                )
-              ],
-              // if (_postage.idUser.compareTo(_idLoggedUser) == 0) ...[
-              //   Container(
-              //     alignment: Alignment.center,
-              //     child: Row(
-              //       crossAxisAlignment: CrossAxisAlignment.center,
-              //       mainAxisAlignment: MainAxisAlignment.center,
-              //       children: [
-              //         GestureDetector(
-              //           child: Container(
-              //             decoration: BoxDecoration(
-              //               color: Color.fromARGB(255, 0, 100, 0),
-              //               borderRadius: BorderRadius.circular(12),
-              //             ),
-              //             padding: EdgeInsets.all(12),
-              //             child: Center(
-              //               child: AutoSizeText(
-              //                 "Excluir",
-              //                 maxLines: 2,
-              //                 minFontSize: 10,
-              //                 maxFontSize: 32,
-              //                 textAlign: TextAlign.center,
-              //                 style:
-              //                     TextStyle(color: Colors.white, fontSize: 22),
-              //               ),
-              //             ),
-              //           ),
-              //           onTap: () {
-              //             _delete();
-              //           },
-              //         ),
-              //       ],
-              //     ),
-              //   ),
-              //   SizedBox(
-              //     height: 10,
-              //   )
-              // ]
             ],
           ),
         ],

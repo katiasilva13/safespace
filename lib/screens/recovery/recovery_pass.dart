@@ -51,7 +51,6 @@ class _RecoverPassState extends State<RecoverPass> {
                       borderRadius: BorderRadius.circular(8),
                     )),
               ),
-              //ShapeBorder(),
               SizedBox(
                 height: 20,
               ),
@@ -86,10 +85,10 @@ class _RecoverPassState extends State<RecoverPass> {
                       color: Colors.white,
                       fontSize: 18,
                     ),
-                  ), //Text
+                  ),
                   color: Theme.of(context).primaryColor,
-                ), //RaisedButton
-              ), //ButtonTheme
+                ),
+              ),
               SizedBox(
                 height: 16.0,
               ),

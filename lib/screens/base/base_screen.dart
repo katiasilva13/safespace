@@ -37,16 +37,17 @@ class BaseScreen extends StatelessWidget {
           Scaffold(
             drawer: CustomDrawer(),
             appBar: AppBar(
-              title: const Text('Meu Perfil'),
+              title: const Text('Perfil'),
             ),
             body: ProfileScreen(),
           ),
-          // Scaffold(
-          //   drawer: CustomDrawer(),
-          //   appBar: AppBar(
-          //     title: const Text('Moderação'),
-          //   ),
-          // ),
+          Scaffold(
+            drawer: CustomDrawer(),
+            appBar: AppBar(
+              title: const Text('Moderação'),
+            ),
+            // body: ModerationScreen(),
+          ),
         ],
       ),
     );

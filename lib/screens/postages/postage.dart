@@ -1,8 +1,6 @@
-// import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:profanity_filter/profanity_filter.dart';
-// import 'package:commons/commons.dart';
 import 'package:safespace/models/postage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -239,14 +237,11 @@ class _PostageScreenState extends State<PostageScreen> {
                         },
                       ),
                       TextFormField(
-                        // expands: true,
                         onSaved: (message) {
                           _postage.message = message;
                         },
                         maxLines: 50,
                         minLines: 1,
-                        // maxLines: null,
-                        // minLines: null,
                         controller: _messageController,
                         keyboardType: TextInputType.text,
                         validator: (text) {

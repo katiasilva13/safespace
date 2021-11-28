@@ -12,6 +12,7 @@ class Postage {
   bool _reported;
   String nicknameUser;
   String photoUser;
+  String nameUser;
 
   Postage();
 

@@ -113,11 +113,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             DocumentSnapshot documentSnapshot = docs[indice];
                             Postage postage =
                                 Postage.fromDocumentSnapshot(documentSnapshot);
-                            // List<Postage> postages = docs
-                            //     .map((e) => Postage.fromDocumentSnapshot(e))
-                            //     .toList();
-                            // postages = postages.where((p) => p.hide != true);
-                            // Postage postage = postages[indice];
                             return PostageItem(
                               postages: postage,
                               onTapItem: () {

@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           primaryColor: const Color(0xffda5afd),
-          scaffoldBackgroundColor: const Color(0xff76E2EC),
+          scaffoldBackgroundColor: const Color(0xffb0f4f5),
           appBarTheme: const AppBarTheme(elevation: 0),
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),

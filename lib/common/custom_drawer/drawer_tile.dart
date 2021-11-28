@@ -30,7 +30,6 @@ class DrawerTile extends StatelessWidget {
                 color: curPage == page ? primaryColor : Colors.grey[700],
               ),
             ),
-            //const SizedBox(width: 32,),
             Text(
               title,
               style: TextStyle(
