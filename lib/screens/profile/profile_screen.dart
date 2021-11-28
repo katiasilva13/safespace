@@ -105,7 +105,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Text(
                                         _nickname != null ? _nickname : '',
                                         style: TextStyle(fontSize: 18)),
-                                    
+
                                   ),
                                 ),
                               ],

@@ -11,14 +11,12 @@ class Postage {
   bool _deleted;
   bool _reported;
 
-
   Postage();
 
   Postage.fromDocumentSnapshot(DocumentSnapshot documentSnapshot) {
     this.id = documentSnapshot.documentID;
     this.idUser = documentSnapshot["idUser"];
     this.message = documentSnapshot["message"];
-    // this.sendDate = documentSnapshot["sendDate"];
     Timestamp t = documentSnapshot['sendDate'];
     this.sendDate = t.toDate();
     this.images = List<String>.from(documentSnapshot["images"]);
@@ -28,11 +26,15 @@ class Postage {
     this.reported = documentSnapshot["reported"];
   }
 
-  Postage.generateidUser() {
+  Postage.generateId() {
     Firestore db = Firestore.instance;
     CollectionReference postages = db.collection("my_posts");
-    this.idUser = postages.document().documentID;
+    this.id = postages.document().documentID;
     this.images = [];
+    this.hide = false;
+    this.block = false;
+    this.deleted = false;
+    this.reported = false;
   }
 
   Map<String, dynamic> toMap() {

@@ -112,11 +112,6 @@ class _AllPostagesState extends State<AllPostages> {
                             DocumentSnapshot documentSnapshot = docs[indice];
                             Postage postage =
                                 Postage.fromDocumentSnapshot(documentSnapshot);
-                            // List<Postage> postages = docs
-                            //     .map((e) => Postage.fromDocumentSnapshot(e))
-                            //     .toList();
-                            // postages = postages.where((p) => p.hide != true);
-                            // Postage postage = postages[indice];
                             return PostageItem(
                               postages: postage,
                               onTapItem: () {
@@ -134,19 +129,6 @@ class _AllPostagesState extends State<AllPostages> {
                 return Container();
               },
             ),
-            // new Scaffold(
-            //   floatingActionButton: FloatingActionButton(
-            //     foregroundColor: Colors.green,
-            //     child: Icon(
-            //       Icons.add,
-            //       color: Colors.white,
-            //     ),
-            //     onPressed: () {
-            //       // Navigator.push(context,
-            //       //     MaterialPageRoute(builder: (context) => RegisterScreen()));
-            //     },
-            //   )
-            // )
           ],
         ),
         onRefresh: refreshPostages,
