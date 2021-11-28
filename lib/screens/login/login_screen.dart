@@ -3,8 +3,8 @@ import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:safespace/helpers/validators.dart';
-import 'package:safespace/models/user.dart';
-import 'package:safespace/models/user_manager.dart';
+import 'package:safespace/models/user/user.dart';
+import 'package:safespace/models/user/user_manager.dart';
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:safespace/models/postage.dart';
-import 'package:safespace/models/user.dart';
+import 'package:safespace/models/postage/postage.dart';
+import 'package:safespace/models/user/user.dart';
 
 class PostageItem extends StatelessWidget {
   Postage postages;

@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:profanity_filter/profanity_filter.dart';
-import 'package:safespace/models/postage.dart';
+import 'package:safespace/models/postage/postage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -280,9 +280,7 @@ class _PostageScreenState extends State<PostageScreen> {
                           onPressed: () {
                             if (_formKey.currentState.validate()) {
                               _formKey.currentState.save();
-
                               _dialogContext = context;
-
                               _post();
                             }
                           },

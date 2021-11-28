@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:safespace/enumerator/permission.dart';
-import 'package:safespace/models/postage.dart';
+import 'package:safespace/models/postage/postage.dart';
 import 'package:safespace/screens/moderation/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
 

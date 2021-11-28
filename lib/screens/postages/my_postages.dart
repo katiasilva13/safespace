@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:safespace/models/postage.dart';
+import 'package:safespace/models/postage/postage.dart';
 import 'package:safespace/screens/postages/postage.dart';
 import 'package:safespace/screens/postages/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
@@ -15,6 +15,7 @@ class MyPostages extends StatefulWidget {
 class _MyPostagesState extends State<MyPostages> {
   String _idLoggedUser;
   String _permission;
+  bool _block;
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
 
@@ -31,11 +32,12 @@ class _MyPostagesState extends State<MyPostages> {
         await db.collection("users").document(_idLoggedUser).get();
     Map<String, dynamic> dados = snapshot.data;
 
-    return dados["permission"];
+    _permission = dados["permission"];
+    _block = dados["block"];
   }
 
   Future<Stream<QuerySnapshot>> _addMyPostagesListener() async {
-    _permission = await _recoverLoggedUserData();
+    await _recoverLoggedUserData();
     Firestore db = Firestore.instance;
     Stream<QuerySnapshot> stream = db
         .collection("my_posts")
@@ -116,6 +118,10 @@ class _MyPostagesState extends State<MyPostages> {
                           return PostageItem(
                             postages: postage,
                             onTapItem: () {
+                              if(_block){
+
+
+                              }else
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(

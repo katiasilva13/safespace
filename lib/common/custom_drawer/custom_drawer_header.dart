@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:safespace/models/user_manager.dart';
+import 'package:safespace/models/user/user_manager.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
   @override

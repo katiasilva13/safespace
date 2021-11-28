@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:safespace/models/postage.dart';
+import 'package:safespace/models/postage/postage.dart';
 import 'package:intl/intl.dart';
-import 'package:safespace/models/user.dart';
+import 'package:safespace/models/user/user.dart';
 
 class ModeratePostageDetailsScreen extends StatefulWidget {
   Postage postage;
@@ -22,11 +22,11 @@ class ModeratePostageDetailsScreen extends StatefulWidget {
 class _ModeratePostageDetailsScreenState
     extends State<ModeratePostageDetailsScreen> {
   Postage _postage;
-  User _author = User();
+  User _author;
+  int _button;
 
   String _idLoggedUser;
   String _permission;
-  int _button;
 
   List<Widget> _getImageList() {
     List<String> imageUrlList = _postage.images;
@@ -56,7 +56,11 @@ class _ModeratePostageDetailsScreenState
 
   _block() {
     Firestore db = Firestore.instance;
-    Map<String, dynamic> updateData = {"block": true, "hide": true};
+    Map<String, dynamic> updateData = {
+      "block": true,
+      "reported": false,
+      "hide": true
+    };
     db
         .collection("posts")
         .document(_postage.id)
@@ -80,7 +84,7 @@ class _ModeratePostageDetailsScreenState
 
   _blockUser() {
     Firestore db = Firestore.instance;
-    Map<String, dynamic> updateData = {"block": true, "hide": true};
+    Map<String, dynamic> updateData = {"block": true};
     db
         .collection("users")
         .document(_author.id)
@@ -115,13 +119,18 @@ class _ModeratePostageDetailsScreenState
 
     Map<String, dynamic> dados = snapshot.data;
 
+    setState(() {
       _author.id = dados["id"];
       _author.name = dados["name"];
       _author.nickname = dados["nickname"];
       _author.block = dados["block"];
+      _author.pronouns = dados["pronouns"];
+    });
 
     if (dados["photo"] != null) {
+      setState(() {
         _author.photo = dados["photo"];
+      });
     }
   }
 
@@ -229,9 +238,7 @@ class _ModeratePostageDetailsScreenState
                               padding: EdgeInsets.fromLTRB(5, 25, 0, 3),
                               child: Container(
                                 child: Text(
-                                    _author.name != null
-                                        ? _author.name
-                                        : '',
+                                    _author.name != null ? _author.name : '',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold)),
@@ -241,9 +248,12 @@ class _ModeratePostageDetailsScreenState
                               padding: EdgeInsets.fromLTRB(5, 1, 0, 3),
                               child: Container(
                                 child: Text(
-                                    _author.nickname != null
-                                        ? _author.nickname
-                                        : '',
+                                    (_author.nickname != null
+                                            ? _author.nickname
+                                            : '') +
+                                        (_author.pronouns != null
+                                            ? (' | ' + _author.pronouns)
+                                            : ''),
                                     style: TextStyle(fontSize: 13)),
                               ),
                             ),

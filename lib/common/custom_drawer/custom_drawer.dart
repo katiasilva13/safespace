@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:safespace/common/custom_drawer/custom_drawer_header.dart';
 import 'package:safespace/common/custom_drawer/drawer_tile.dart';
 import 'package:safespace/enumerator/permission.dart';
-import 'package:safespace/models/user_manager.dart';
+import 'package:safespace/models/user/user_manager.dart';
 
 class CustomDrawer extends StatelessWidget {
   String _idLoggedUser;

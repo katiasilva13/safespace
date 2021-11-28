@@ -3,7 +3,7 @@ import 'dart:developer' as developer;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:safespace/models/user_manager.dart';
+import 'package:safespace/models/user/user_manager.dart';
 import 'package:safespace/screens/base/base_screen.dart';
 import 'package:safespace/screens/login/login_screen.dart';
 import 'package:safespace/screens/moderation/all_blocked.dart';
