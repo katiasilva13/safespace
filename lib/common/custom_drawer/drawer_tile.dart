@@ -13,6 +13,7 @@ class DrawerTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final int curPage = context.watch<PageManager>().page;
     final Color primaryColor = Theme.of(context).primaryColor;
+    final _scrollController = ScrollController(initialScrollOffset: 0);
 
     return InkWell(
       onTap: () {

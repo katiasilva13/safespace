@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'edit_profile.dart';
+import 'package:flutter/src/widgets/scroll_controller.dart';
 
 class ProfileScreen extends StatefulWidget {
   @override

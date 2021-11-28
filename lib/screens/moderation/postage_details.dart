@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:safespace/models/postage/postage.dart';
 import 'package:intl/intl.dart';
 import 'package:safespace/models/user/user.dart';
+import 'package:flutter/src/widgets/scroll_controller.dart';
 
 class ModeratePostageDetailsScreen extends StatefulWidget {
   Postage postage;
@@ -22,7 +23,7 @@ class ModeratePostageDetailsScreen extends StatefulWidget {
 class _ModeratePostageDetailsScreenState
     extends State<ModeratePostageDetailsScreen> {
   Postage _postage;
-  User _author; //= User();
+  User _author = User();
   int _button;
 
   String _idLoggedUser;

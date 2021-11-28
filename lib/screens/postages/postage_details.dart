@@ -8,6 +8,7 @@ import 'package:safespace/models/postage/postage.dart';
 import 'package:safespace/enumerator/permission.dart';
 import 'package:intl/intl.dart';
 import 'package:safespace/models/user/user.dart';
+import 'package:flutter/src/widgets/scroll_controller.dart';
 
 class PostageDetailsScreen extends StatefulWidget {
   Postage postage;
