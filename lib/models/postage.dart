@@ -8,7 +8,6 @@ class Postage {
   List<String> _images;
   bool _hide;
   bool _block;
-  bool _deleted;
   bool _reported;
   String nicknameUser;
   String photoUser;
@@ -25,7 +24,6 @@ class Postage {
     this.images = List<String>.from(documentSnapshot["images"]);
     this.hide = documentSnapshot["hide"];
     this.block = documentSnapshot["block"];
-    this.deleted = documentSnapshot["deleted"];
     this.reported = documentSnapshot["reported"];
   }
 
@@ -36,7 +34,6 @@ class Postage {
     this.images = [];
     this.hide = false;
     this.block = false;
-    this.deleted = false;
     this.reported = false;
   }
 
@@ -48,7 +45,6 @@ class Postage {
       "message": this.message,
       "hide": this.hide,
       "block": this.block,
-      "deleted": this.deleted,
       "reported": this.reported,
       "images": this.images
     };
@@ -101,11 +97,5 @@ class Postage {
 
   set reported(bool value) {
     _reported = value;
-  }
-
-  bool get deleted => _deleted;
-
-  set deleted(bool value) {
-    _deleted = value;
   }
 }

@@ -45,7 +45,6 @@ class _AllPostagesState extends State<AllPostages> {
     Stream<QuerySnapshot> stream = db
         .collection("posts")
         .where('hide', whereIn: [null, false])
-        .where('deleted', isEqualTo: false)
         .orderBy('sendDate', descending: true)
         .snapshots();
     stream.listen((dados) {

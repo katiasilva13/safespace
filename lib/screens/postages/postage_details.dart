@@ -65,13 +65,16 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
 
   _delete() {
     Firestore db = Firestore.instance;
-    Map<String, dynamic> updateData = {"deleted": true, "hide": true};
     db
+        .collection("my_posts")
+        .document(_idLoggedUser)
         .collection("posts")
         .document(_postage.id)
-        .updateData(updateData)
+        .delete()
         .then((_) {
-      Navigator.of(context).pushReplacementNamed('/base');
+      db.collection("posts").document(_postage.id).delete().then((_) {
+        Navigator.of(context).pushReplacementNamed('/base');
+      });
     });
   }
 

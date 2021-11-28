@@ -50,7 +50,7 @@ class _ModeratePostageDetailsScreenState
         .document(_postage.id)
         .updateData(updateData)
         .then((_) {
-      Navigator.of(context).pushReplacementNamed('/reported-posts');
+      Navigator.of(context).pushReplacementNamed('/base');
     });
   }
 
@@ -62,7 +62,7 @@ class _ModeratePostageDetailsScreenState
         .document(_postage.id)
         .updateData(updateData)
         .then((_) {
-      Navigator.of(context).pushReplacementNamed('/blocked-posts');
+      Navigator.of(context).pushReplacementNamed('/base');
     });
   }
 
@@ -74,7 +74,7 @@ class _ModeratePostageDetailsScreenState
         .document(_postage.id)
         .updateData(updateData)
         .then((_) {
-      Navigator.of(context).pushReplacementNamed('/blocked-posts');
+      Navigator.of(context).pushReplacementNamed('/base');
     });
   }
 
@@ -86,7 +86,7 @@ class _ModeratePostageDetailsScreenState
         .document(_author.id)
         .updateData(updateData)
         .then((_) {
-      Navigator.of(context).pushReplacementNamed('/blocked-posts');
+      Navigator.of(context).pushReplacementNamed('/base');
     });
   }
 
@@ -98,7 +98,7 @@ class _ModeratePostageDetailsScreenState
         .document(_author.id)
         .updateData(updateData)
         .then((_) {
-      Navigator.of(context).pushReplacementNamed('/blocked-posts');
+      Navigator.of(context).pushReplacementNamed('/base');
     });
   }
 
@@ -115,17 +115,13 @@ class _ModeratePostageDetailsScreenState
 
     Map<String, dynamic> dados = snapshot.data;
 
-    // setState(() {
       _author.id = dados["id"];
       _author.name = dados["name"];
       _author.nickname = dados["nickname"];
       _author.block = dados["block"];
-    // });
 
     if (dados["photo"] != null) {
-      // setState(() {
         _author.photo = dados["photo"];
-      // });
     }
   }
 

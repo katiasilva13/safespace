@@ -47,7 +47,6 @@ class _AllReportedState extends State<AllReported> {
     Stream<QuerySnapshot> stream = db
         .collection("posts")
         .where('reported', isEqualTo: true)
-        .where('deleted', isEqualTo: false)
         .orderBy('sendDate', descending: true)
         .snapshots();
     stream.listen((dados) {

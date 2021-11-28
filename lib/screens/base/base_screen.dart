@@ -15,7 +15,7 @@ class BaseScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    developer.log('log me', name: context.toString());
+    developer.log('BaseScreen line 18', name: context.toString());
     return Provider(
       create: (_) => PageManager(pageController),
       child: PageView(

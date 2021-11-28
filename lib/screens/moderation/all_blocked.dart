@@ -44,11 +44,8 @@ class _AllBlockedState extends State<AllBlocked> {
   Future<Stream<QuerySnapshot>> _addPostagesListener() async {
     _permission = await _recoverUserData();
     Firestore db = Firestore.instance;
-    Stream<QuerySnapshot> stream = db
-        .collection("posts")
-        .where('block', isEqualTo: true)
-        .where('deleted', isEqualTo: false)
-        .snapshots();
+    Stream<QuerySnapshot> stream =
+        db.collection("posts").where('block', isEqualTo: true).snapshots();
     stream.listen((dados) {
       _controller.add(dados);
     });
