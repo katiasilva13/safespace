@@ -7,7 +7,6 @@ class RecoverPass extends StatefulWidget {
 }
 
 class _RecoverPassState extends State<RecoverPass> {
-
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _emailController = TextEditingController();
@@ -23,10 +22,8 @@ class _RecoverPassState extends State<RecoverPass> {
       body: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-        image: DecorationImage(
-        fit: BoxFit.cover,
-        image: AssetImage("imagens/imagem_fundo.jpg")
-          ),
+          image: DecorationImage(
+              fit: BoxFit.cover, image: AssetImage("imagens/imagem_fundo.jpg")),
         ),
         child: Form(
           key: _formKey,
@@ -42,17 +39,18 @@ class _RecoverPassState extends State<RecoverPass> {
                 },
                 style: TextStyle(fontSize: 20),
                 decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.email, color: Theme.of(context).primaryColor,),
+                    prefixIcon: Icon(
+                      Icons.email,
+                      color: Theme.of(context).primaryColor,
+                    ),
                     contentPadding: EdgeInsets.fromLTRB(32, 16, 32, 16),
                     hintText: "e-mail",
                     filled: true,
                     fillColor: Colors.white,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8),
-                    )
-                ),
+                    )),
               ),
-              //ShapeBorder(),
               SizedBox(
                 height: 20,
               ),
@@ -71,8 +69,8 @@ class _RecoverPassState extends State<RecoverPass> {
                     else {
                       _scaffoldKey.currentState.showSnackBar(
                         SnackBar(
-                          content:
-                          Text("Confira o link de recuperação no seu e-mail"),
+                          content: Text(
+                              "Confira o link de recuperação no seu e-mail"),
                           backgroundColor: Theme.of(context).primaryColor,
                           duration: Duration(seconds: 3),
                         ),
@@ -87,10 +85,10 @@ class _RecoverPassState extends State<RecoverPass> {
                       color: Colors.white,
                       fontSize: 18,
                     ),
-                  ), //Text
+                  ),
                   color: Theme.of(context).primaryColor,
-                ), //RaisedButton
-              ), //ButtonTheme
+                ),
+              ),
               SizedBox(
                 height: 16.0,
               ),
@@ -112,8 +110,8 @@ class _RecoverPassState extends State<RecoverPass> {
                           .sendPasswordResetEmail(email: _emailController.text);
                       _scaffoldKey.currentState.showSnackBar(
                         SnackBar(
-                          content:
-                          Text("Confira o link de recuperação no seu e-mail"),
+                          content: Text(
+                              "Confira o link de recuperação no seu e-mail"),
                           backgroundColor: Colors.green,
                           duration: Duration(seconds: 3),
                         ),

@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:safespace/helpers/firebase_erros.dart';
-import 'package:safespace/models/user.dart';
+import 'package:safespace/models/user/user.dart';
 
 class UserManager extends ChangeNotifier {
   UserManager() {

@@ -6,12 +6,12 @@ import 'package:safespace/models/postage/postage.dart';
 import 'package:safespace/screens/postages/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
 
-class HomeScreen extends StatefulWidget {
+class AllPostages extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _AllPostagesState createState() => _AllPostagesState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _AllPostagesState extends State<AllPostages> {
   String _idLoggedUser;
   String _permission;
 
@@ -20,10 +20,14 @@ class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
 
+  final scrollController = ScrollController(initialScrollOffset: 0);
+
   @override
   void initState() {
     super.initState();
-    _addFeedListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addPostagesListener();
+    });
   }
 
   _recoverUserData() async {
@@ -39,24 +43,25 @@ class _HomeScreenState extends State<HomeScreen> {
     return dados["permission"];
   }
 
-  Future<Stream<QuerySnapshot>> _addFeedListener() async {
+  Future<Stream<QuerySnapshot>> _addPostagesListener() async {
     _permission = await _recoverUserData();
     Firestore db = Firestore.instance;
-    Stream<QuerySnapshot> stream = db.collection("posts").snapshots();
-
+    Stream<QuerySnapshot> stream = db
+        .collection("posts")
+        .where('hide', whereIn: [null, false])
+        .orderBy('sendDate', descending: true)
+        .snapshots();
     stream.listen((dados) {
       _controller.add(dados);
     });
   }
 
-  Future<Null> refreshFeed() async {
+  Future<Null> refreshPostages() async {
     _refreshIndicatorKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
-
     setState(() {
-      _addFeedListener();
+      _addPostagesListener();
     });
-
     return null;
   }
 
@@ -68,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          Text("Carregando..."),
+          Text("Carregando"),
           CircularProgressIndicator(),
         ],
       ),
@@ -132,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        onRefresh: refreshFeed,
+        onRefresh: refreshPostages,
       ),
     );
   }

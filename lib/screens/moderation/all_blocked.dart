@@ -2,20 +2,24 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:safespace/enumerator/permission.dart';
 import 'package:safespace/models/postage/postage.dart';
-import 'package:safespace/screens/postages/postage_details.dart';
+import 'package:safespace/screens/moderation/postage_details.dart';
 import 'package:safespace/widget/postage_item.dart';
 
-class HomeScreen extends StatefulWidget {
+class AllBlocked extends StatefulWidget {
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _AllBlockedState createState() => _AllBlockedState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _AllBlockedState extends State<AllBlocked> {
   String _idLoggedUser;
   String _permission;
 
   final _controller = StreamController<QuerySnapshot>.broadcast();
+
+  final scrollController = ScrollController(initialScrollOffset: 0);
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -23,7 +27,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _addFeedListener();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _addPostagesListener();
+    });
   }
 
   _recoverUserData() async {
@@ -39,24 +45,22 @@ class _HomeScreenState extends State<HomeScreen> {
     return dados["permission"];
   }
 
-  Future<Stream<QuerySnapshot>> _addFeedListener() async {
+  Future<Stream<QuerySnapshot>> _addPostagesListener() async {
     _permission = await _recoverUserData();
     Firestore db = Firestore.instance;
-    Stream<QuerySnapshot> stream = db.collection("posts").snapshots();
-
+    Stream<QuerySnapshot> stream =
+        db.collection("posts").where('block', isEqualTo: true).snapshots();
     stream.listen((dados) {
       _controller.add(dados);
     });
   }
 
-  Future<Null> refreshFeed() async {
+  Future<Null> refreshPostages() async {
     _refreshIndicatorKey.currentState?.show(atTop: false);
     await Future.delayed(Duration(seconds: 2));
-
     setState(() {
-      _addFeedListener();
+      _addPostagesListener();
     });
-
     return null;
   }
 
@@ -68,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(
             height: 20,
           ),
-          Text("Carregando..."),
+          Text("Carregando"),
           CircularProgressIndicator(),
         ],
       ),
@@ -91,6 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   case ConnectionState.active:
                   case ConnectionState.done:
                     QuerySnapshot querySnapshot = snapshot.data;
+
+                    SchedulerBinding.instance.addPostFrameCallback((_) {
+                      if (PermissionHelper.isDefault(_permission)) {
+                        Navigator.of(context).pushReplacementNamed('/base');
+                        return null;
+                      }
+                    });
 
                     if (querySnapshot.documents.length == 0) {
                       return Container(
@@ -120,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            PostageDetailsScreen(
+                                            ModeratePostageDetailsScreen(
                                                 postage, _permission)));
                               },
                             );
@@ -132,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
-        onRefresh: refreshFeed,
+        onRefresh: refreshPostages,
       ),
     );
   }
