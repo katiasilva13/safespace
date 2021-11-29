@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:safespace/models/user_manager.dart';
+import 'package:safespace/models/user/user_manager.dart';
 
 class CustomDrawerHeader extends StatelessWidget {
   @override
@@ -18,6 +18,7 @@ class CustomDrawerHeader extends StatelessWidget {
                 'SafeSpace',
                 style: TextStyle(
                   fontSize: 34,
+                  fontStyle: FontStyle.italic,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -34,10 +35,8 @@ class CustomDrawerHeader extends StatelessWidget {
                 onTap: () {
                   if (userManager.isLoggedIn) {
                     userManager.signOut();
-                    Navigator.of(context).pushNamed('/login');
-                  } else {
-                    Navigator.of(context).pushNamed('/login');
                   }
+                  Navigator.of(context).pushNamed('/login');
                 },
                 child: Text(
                   userManager.isLoggedIn ? 'Sair' : 'Entre ou cadastre-se >',
