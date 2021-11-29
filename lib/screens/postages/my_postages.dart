@@ -122,14 +122,12 @@ class _MyPostagesState extends State<MyPostages> {
                           return PostageItem(
                             postages: postage,
                             onTapItem: () {
-                              if (_block) {
-                              } else
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            PostageDetailsScreen(
-                                                postage, _permission)));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          PostageDetailsScreen(
+                                              postage, _permission)));
                             },
                           );
                         }),

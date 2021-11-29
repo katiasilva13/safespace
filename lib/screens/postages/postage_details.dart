@@ -29,7 +29,13 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
 
   final scrollController = ScrollController(initialScrollOffset: 0);
 
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
   List<Widget> _getImageList() {
+    if (_postage == null) {
+      return null;
+    }
     List<String> imageUrlList = _postage.images;
 
     return imageUrlList.map((url) {
@@ -130,6 +136,15 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
     await _getPostAuthor();
   }
 
+  Future<Null> refreshPost() async {
+    _refreshIndicatorKey.currentState?.show(atTop: false);
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      _initialize();
+    });
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -176,106 +191,110 @@ class _PostageDetailsScreenState extends State<PostageDetailsScreen> {
       ),
       body: Stack(
         children: [
-          ListView(
-            children: [
-              SizedBox(
-                height: 80,
-                child: Row(
-                  children: [
-                    CircleAvatar(
-                      maxRadius: 30,
-                      backgroundColor: Colors.grey,
-                      backgroundImage: _author.photo != null
-                          ? NetworkImage(_author.photo)
-                          : null,
-                    ),
-                    Container(
-                      height: 150,
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 1, 0, 0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(5, 25, 0, 3),
-                              child: Container(
-                                child: Text(
-                                    _author.name != null ? _author.name : '',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold)),
+          RefreshIndicator(
+            key: _refreshIndicatorKey,
+            child: ListView(
+              children: [
+                SizedBox(
+                  height: 80,
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        maxRadius: 30,
+                        backgroundColor: Colors.grey,
+                        backgroundImage: _author.photo != null
+                            ? NetworkImage(_author.photo)
+                            : null,
+                      ),
+                      Container(
+                        height: 150,
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 1, 0, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(5, 25, 0, 3),
+                                child: Container(
+                                  child: Text(
+                                      _author.name != null ? _author.name : '',
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold)),
+                                ),
                               ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(5, 1, 0, 3),
-                              child: Container(
-                                child: Text(
-                                    (_author.nickname != null
-                                            ? _author.nickname
-                                            : '') +
-                                        (_author.pronouns != null
-                                            ? (' | ' + _author.pronouns)
-                                            : ''),
-                                    style: TextStyle(fontSize: 13)),
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(5, 1, 0, 3),
+                                child: Container(
+                                  child: Text(
+                                      (_author.nickname != null
+                                              ? _author.nickname
+                                              : '') +
+                                          (_author.pronouns != null
+                                              ? (' | ' + _author.pronouns)
+                                              : ''),
+                                      style: TextStyle(fontSize: 13)),
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: (_postage.images.first.length > 0) ? 250 : 0,
-                child: Carousel(
-                  images: _getImageList(),
-                  dotSize: 8,
-                  dotBgColor: Colors.transparent,
-                  dotColor: Colors.black,
-                  autoplay: false,
-                  dotIncreasedColor: Colors.black,
+                SizedBox(
+                  height: (_postage.images.first.length > 0) ? 250 : 0,
+                  child: Carousel(
+                    images: _getImageList(),
+                    dotSize: 8,
+                    dotBgColor: Colors.transparent,
+                    dotColor: Colors.black,
+                    autoplay: false,
+                    dotIncreasedColor: Colors.black,
+                  ),
                 ),
-              ),
-              Container(
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Post",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                Container(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Post",
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    Text(
-                      "${_postage.message}",
-                      style: TextStyle(
-                        fontSize: 18,
+                      Text(
+                        "${_postage.message}",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(),
-                    ),
-                    Text(
-                      "Data de postagem",
-                      style: TextStyle(
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: EdgeInsets.symmetric(vertical: 16),
+                        child: Divider(),
                       ),
-                    ),
-                    Text(
-                      "${(DateFormat('dd/MM/yyyy H:m:s').format(_postage.sendDate))}",
-                      style: TextStyle(
-                        fontSize: 12,
+                      Text(
+                        "Data de postagem",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                  ],
+                      Text(
+                        "${(DateFormat('dd/MM/yyyy H:m:s').format(_postage.sendDate))}",
+                        style: TextStyle(
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
+            onRefresh: refreshPost,
           ),
         ],
       ),
